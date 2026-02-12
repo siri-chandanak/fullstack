@@ -22,22 +22,22 @@ This guide covers everything from:
 
 JavaScript is a:
 
-* High-level
-* Interpreted
-* Dynamically typed
-* Single-threaded
-* Event-driven language
+* High-level: Easy for humans to read and write because it handles memory and system details automatically.
+* Interpreted: Runs line-by-line through an engine without needing a separate compilation step.
+* Dynamically typed: You don’t need to declare data types; variables can change type at runtime.
+* Single-threaded: Executes one task at a time using a single main call stack.
+* Event-driven language: Code runs in response to events like clicks, requests, or timers.
 
 Runs in:
 
 * Browsers
-* Servers (Node.js)
+* Servers (Node.js): Runs on the server using Node.js to build backend services and APIs.
 
 ---
 
 # 📌 2. JavaScript vs ECMAScript
 
-ECMAScript:
+ECMAScript: A standardized specification that defines the rules, syntax, and features a scripting language should follow.
 Specification (rules)
 
 JavaScript:
