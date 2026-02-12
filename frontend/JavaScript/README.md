@@ -37,8 +37,7 @@ Runs in:
 
 # 📌 2. JavaScript vs ECMAScript
 
-ECMAScript: A standardized specification that defines the rules, syntax, and features a scripting language should follow.
-Specification (rules)
+ECMAScript: A standardized specification that defines the rules, syntax, and features a scripting language should follow. (European Computer Manufacturers Association; now called Ecma International)
 
 JavaScript:
 Implementation of ECMAScript.
@@ -63,14 +62,14 @@ Server:
 
 Examples:
 
-* V8 (Chrome, Node.js)
-* SpiderMonkey (Firefox)
+* V8 (Chrome, Node.js): A JavaScript engine by Google that converts JS code into fast machine code and runs it.
+* SpiderMonkey (Firefox): Mozilla’s JavaScript engine that reads, compiles, and executes JavaScript in Firefox.
 
 Engine responsibilities:
 
-* Parse code
-* Compile
-* Execute
+* Parse code: Reads the JavaScript and checks syntax to understand its structure.
+* Compile: Converts the parsed code into optimized machine-level instructions.
+* Execute: Runs the compiled code to perform the actual tasks.
 
 ---
 
@@ -106,6 +105,10 @@ const:
 
 * Block scoped
 * Cannot reassign
+
+Block scope: A variable exists only inside the { } where it is created (like inside an if, for, or any code block).
+
+Function scope: A variable exists anywhere inside the entire function where it is declared, even outside inner { } blocks.
 
 ---
 
@@ -154,7 +157,7 @@ Boolean(1)
 
 Arithmetic:
 
-* * * / %
++, *, /, %
 
 Comparison:
 == === != !== > <
@@ -166,18 +169,15 @@ Logical:
 
 # 📌 11. == vs ===
 
-== → loose comparison
-=== → strict comparison (recommended)
+== → loose comparison (Compares values after automatically converting their types if needed.)
+
+=== → strict comparison (recommended, Compares both value and type without any type conversion.)
 
 ---
 
 # 📌 12. Control Statements
 
-if / else
-switch
-for
-while
-do-while
+if / else, switch, for, while, do-while
 
 ---
 
@@ -193,14 +193,65 @@ function add(a, b) {
 
 # 📌 14. Function Types
 
-Function declaration
-Function expression
-Arrow function
+- Function declaration
+- Function expression
+- Arrow function
 
 ```
 const add = (a, b) => a + b;
 ```
+## Function Declaration
+```js
+function greet() {
+  console.log("Hello");
+}
+greet();
+```
+## Function Expression
+```js
+const greet = function() {
+  console.log("Hello");
+};
+greet();
+```
+## Arrow Function
+```js
+const greet = () => {
+  console.log("Hello");
+};
+greet();
+```
+## Anonymous Function (used as callback)
+```js
+setTimeout(function() {
+  console.log("Hi");
+}, 1000);
+```
+## IIFE (Immediately Invoked Function Expression)
+```js
+(function() {
+  console.log("Runs immediately");
+})();
+```
+## Callback Function
+```js
+function processUser(name, callback) {
+  callback(name);
+}
 
+processUser("John", function(n) {
+  console.log("Hello " + n);
+});
+```
+## Constructor Function
+```js
+function Person(name) {
+  this.name = name;
+}
+
+const p1 = new Person("John");
+console.log(p1.name);
+```
 ---
 
 # 📌 15. Arrow Function Features
@@ -234,13 +285,7 @@ user["name"]
 const arr = [1, 2, 3];
 ```
 
-Methods:
-
-push()
-pop()
-map()
-filter()
-reduce()
+Methods: push(), pop(), map(), filter(), reduce()
 
 ---
 
@@ -258,7 +303,7 @@ for (let item of arr) {}
 
 # 📌 19. DOM (Browser Concept)
 
-DOM = Document Object Model
+DOM = Document Object Model(A tree-like representation of a web page that JavaScript can access and modify.)
 
 Allows JS to:
 
@@ -277,15 +322,15 @@ button.addEventListener("click", () => {});
 
 # 📌 21. Scope
 
-Global scope
-Function scope
-Block scope
+- Global scope
+- Function scope
+- Block scope
 
 ---
 
 # 📌 22. Hoisting
 
-Variables & functions moved to top.
+Variables & functions moved to top. JavaScript moves variable and function declarations to the top of their scope before execution.
 
 ```
 console.log(x);
@@ -321,9 +366,26 @@ Changes based on call type.
 
 # 📌 25. Prototypes
 
-JavaScript uses:
+JavaScript uses: Prototype-based inheritance.
 
-Prototype-based inheritance.
+- Prototypes: JavaScript objects can inherit properties and methods from other objects using a prototype chain.
+- Prototype-based inheritance: Instead of class-only inheritance (like Java), JavaScript links objects to other objects; if a property/method isn’t found on one object, it looks up in its prototype.
+```js
+// Parent object
+const person = {
+  greet: function () {
+    console.log("Hello!");
+  }
+};
+
+// Create a new object that uses person as its prototype
+const student = Object.create(person);
+
+student.name = "Siri";
+
+// student doesn't have greet(), so JS looks in its prototype (person)
+student.greet();  // Hello!
+```
 
 ---
 
@@ -366,22 +428,20 @@ import fn from "./file.js";
 
 # 📌 29. Asynchronous JavaScript (CRITICAL)
 
-JavaScript is:
+Asynchronous JavaScript: Lets JavaScript handle time-taking tasks (API calls, timers, file reads) without stopping the main thread.
 
-Single-threaded.
+Single-threaded: JavaScript runs one task at a time on a single call stack.
 
-Uses:
-
-* Event loop
-* Callbacks
-* Promises
-* Async/await
-
+Uses: Event loop, , Callbacks, Promises, Async/await
 ---
 
 # 📌 30. Callback
 
-Function passed as argument.
+Function passed as argument. Functions passed into other functions to run later when a task finishes.
+
+```js
+setTimeout(() => console.log("Done"), 1000);
+```
 
 ---
 
@@ -395,15 +455,20 @@ States:
 * resolved
 * rejected
 
+```js
+fetch(url).then(res => console.log(res));
+```
+
 ---
 
 # 📌 32. Async/Await
 
-Cleaner async code.
+Cleaner async code.Cleaner way to write promise-based code that looks synchronous.
 
-```
-async function test() {
-  const data = await fetch(url);
+```js
+async function load() {
+  const res = await fetch(url);
+  console.log(res);
 }
 ```
 
@@ -411,6 +476,7 @@ async function test() {
 
 # 📌 33. Event Loop (VERY IMPORTANT)
 
+ Manages execution by moving completed async tasks from the queue to the call stack when it’s free.
 Handles:
 
 * Async tasks
@@ -426,39 +492,81 @@ Queues:
 
 # 📌 34. Microtask vs Task Queue
 
-Microtask:
-Promises
+Microtask Queue (higher priority): Used for Promise callbacks (.then, catch, finally) and runs immediately after the current code finishes, before moving to the task queue.
 
-Task:
-setTimeout
+Task Queue (lower priority): Used for setTimeout, setInterval, DOM events, etc., and runs only after all microtasks are completed.
+
+```js
+console.log("Start");
+
+setTimeout(() => console.log("Timeout"), 0);
+
+Promise.resolve().then(() => console.log("Promise"));
+
+console.log("End");
+```
+## Output
+```js
+Start
+End
+Promise   // Microtask runs first
+Timeout   // Task runs after
+```
 
 ---
 
 # 📌 35. Error Handling
 
-```
+```js
 try {
+  let x = 10 / 0;
+  console.log(y); // y is not defined → error
 } catch (e) {
+  console.log("Error occurred:", e.message);
 } finally {
+  console.log("This always runs");
 }
+
 ```
 
 ---
 
 # 📌 36. JSON Handling
 
-```
-JSON.parse()
-JSON.stringify()
+Used to convert between JSON strings and JavaScript objects.
+JSON.parse() – Converts a JSON string into a JavaScript object.
+JSON.stringify() – Converts a JavaScript object into a JSON string.
+```js
+const str = '{"name":"Siri","age":24}';
+const obj = JSON.parse(str);
+console.log(obj.name); // Siri
+
+const obj = { name: "Siri", age: 24 };
+const str = JSON.stringify(obj);
+console.log(str); // {"name":"Siri","age":24}
+
 ```
 
 ---
 
 # 📌 37. Browser APIs
 
-Fetch API
-LocalStorage
-SessionStorage
+Browser APIs: Built-in features provided by the browser that JavaScript can use to interact with web data and storage.
+- Fetch API: Used to send HTTP requests and get data from servers (like calling an API).
+- LocalStorage: Stores data in the browser with no expiry; remains even after closing the tab/browser.
+- SessionStorage: Stores data only for the current tab/session; cleared when the tab is closed.
+
+```js
+fetch("https://api.example.com/data")
+  .then(res => res.json())
+  .then(data => console.log(data));
+
+localStorage.setItem("name", "Siri");
+console.log(localStorage.getItem("name"));
+
+sessionStorage.setItem("user", "John");
+console.log(sessionStorage.getItem("user"));
+```
 
 ---
 
@@ -468,32 +576,60 @@ SessionStorage
 fetch(url)
   .then(res => res.json())
 ```
+fetch(url) → Sends an HTTP request to the given URL.
+
+.then(res => res.json()) → Converts the response into JSON format.
+
+.then(data => ...) → Uses the actual data returned from the server.
 
 ---
 
 # 📌 39. Node.js Basics
 
-Node allows JS to run:
-
-On server.
+Node.js Basics: Node.js lets JavaScript run outside the browser, mainly to build backend/server applications.
 
 ---
 
 # 📌 40. Node Core Modules
 
-fs
-http
-path
-os
+Node Core Modules: Built-in modules in Node.js that help perform common system and server tasks without installing anything extra.
+- fs (File System): Used to read, write, update, and delete files.
+- http: Used to create web servers and handle HTTP requests/responses.
+- path: Helps work with file and folder paths (join, resolve, get file names).
+- os: Provides information about the operating system (CPU, memory, platform).
+
+```js
+const fs = require("fs");
+
+fs.writeFileSync("test.txt", "Hello Node");
+const data = fs.readFileSync("test.txt", "utf8");
+console.log(data);
+
+const http = require("http");
+
+http.createServer((req, res) => {
+  res.write("Hello from server");
+  res.end();
+}).listen(3000);
+
+const path = require("path");
+
+const fullPath = path.join(__dirname, "test.txt");
+console.log(fullPath);
+
+const os = require("os");
+
+console.log(os.platform());
+console.log(os.totalmem());
+```
 
 ---
 
 # 📌 41. NPM
 
-Node Package Manager.
+NPM (Node Package Manager): A tool that comes with Node.js to install and manage external libraries (packages) for your project.
 
-Install libraries:
-
+Install a library:
 ```
 npm install express
 ```
