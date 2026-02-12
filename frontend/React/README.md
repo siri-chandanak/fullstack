@@ -1,5 +1,288 @@
 # ⚛️ React Master Notes
 
+React is just this: “Show UI based on data. When data changes → UI updates automatically.”
+
+React has only 3 main things:
+1. Components → Small UI blocks
+2. Props → Data coming from parent
+3. State → Data inside component that changes
+
+### JSX
+- It looks like HTML, but not HTML
+- You can you javascript inside {}
+
+Inside {} you can use: variables, calculations, functions
+```js
+<h1>{5 + 5}</h1>
+```
+- Only ONE parent element allowed
+```js
+return (
+  <h1>Hello</h1>
+  <p>Welcome</p>
+); //error
+return (
+  <div>
+    <h1>Hello</h1>
+    <p>Welcome</p>
+  </div>
+);
+```
+- class becomes className
+```html
+<div class="box"> //html
+<div className="box"> //jsx
+```
+- Events use camelCase
+```html
+<button onclick="clickMe()"> //html
+<button onClick={clickMe}> //jsx
+```
+
+### Component
+- A component is just a function that returns JSX. 
+- Reusable UI block.
+- Component names must start with CAPITAL letter.
+- A component MUST return only ONE parent element.
+
+Example in real life: Button, Navbar, Profile card, Login form
+
+```jsx
+function Button() {
+  return <button>Click Me</button>;
+}
+
+function App() {
+  return (
+    <div>
+      <h1>Hello</h1>
+      <Button />
+    </div>
+  );
+}
+
+```
+
+### Props
+- Makes component dynamic
+- props are like function parameters.
+- Props = Data sent from a parent component to a child component.
+
+```jsx
+function User(props) {
+  return <h1>Hello {props.name}</h1>;
+}
+
+function App() {
+  return <User name="Siri" />;
+}
+
+```
+- Destructuring
+```jsx
+function User({ name }) { //More readable, Destructuring
+  return <h1>Hello {name}</h1>;
+}
+<User name="Siri" />
+<User name="Alex" />
+<User name="John" />
+```
+- Props can send anything
+```jsx
+function User({ name, age, isValid }) {
+  return (
+    <div>
+      <h1>{name}</h1>
+      <p>Age: {age}</p>
+      <p>Valid User: {isValid ? "Yes" : "No"}</p>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <User name="Siri" age={25} isValid={true} />
+      <User name="Alex" age={30} isValid={false} />
+    </div>
+  );
+}
+```
+- Props are READ-ONLY. You should NEVER change props inside a component.
+- Data always moves: Parent → Child. Not the opposite.
+
+### State (useState)
+- State = Data inside a component that can change.
+- When state changes: 👉 React automatically updates the UI.
+```jsx
+import { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={() => setCount((count) => count + 1)}>+</button>
+    </div>
+  );
+}
+```
+- `const [count, setCount] = useState(0);` => count → current value, setCount → function to update value, 0 → starting value
+- State is used for: Counters, Form inputs, Login status, Show/Hide password, Like buttons, Toggle dark mode
+- Almost every dynamic feature uses state.
+- State can store anything
+```jsx
+import { useState } from "react";
+
+function UserProfile() {
+  const [user, setUser] = useState({
+    name: "Siri",          // string
+    age: 25,               // number
+    isLoggedIn: true,      // boolean
+    address: { city: "NY" }, // object
+    skills: ["React", "JS"]  // array
+  });
+
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>Age: {user.age}</p>
+      <p>Status: {user.isLoggedIn ? "Online" : "Offline"}</p>
+      <p>City: {user.address.city}</p>
+      <p>Skill: {user.skills[0]}</p>
+    </div>
+  );
+}
+```
+
+### useEffect (Side Effects)
+- A side effect = something that happens after the UI renders
+- Examples: Calling an API, Setting a timer, Reading from localStorage, Adding event listeners
+- These things are NOT part of rendering UI. They happen in the background. That’s why React gives us useEffect.
+```jsx
+useEffect(() => {
+  // code runs here
+}, []);
+//Runs only one time
+
+//With Dependency
+useEffect(() => {
+  console.log("Count changed");
+}, [count]);
+// runs whenever count changes
+
+//No array
+useEffect(() => {
+  console.log("Runs every render");
+});
+//This runs: Every time the component updates (not recommended)
+```
+- Think of it like: “Run this code after the component appears on screen.”
+```jsx
+function App() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log("Count changed:", count);
+  }, [count]);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+### Events & Forms
+- In HTML `<button onclick="doSomething()">`, In react => `<button onClick={doSomething}>`
+- Events - Button Clicks
+```jsx
+function App() {
+  function handleClick() {
+    alert("Button clicked!");
+  }
+
+  return <button onClick={handleClick}>Click Me</button>;
+}
+//With State
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+- Input Fields(Typing): In React, inputs are usually controlled by state.
+```jsx
+function App() {
+  const [name, setName] = useState("");
+
+  return (
+    <input
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+    />
+  );
+}
+```
+- Display what user types
+```jsx
+function App() {
+  const [name, setName] = useState("");
+
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <h1>Hello {name}</h1>
+    </div>
+  );
+}
+```
+- Form submit: login form
+```jsx
+function App() {
+  const [email, setEmail] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(email);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## What is React?
 
 React is a **JavaScript library** for building **UI components**.
@@ -11,9 +294,65 @@ You build small reusable components, React updates the UI efficiently using a **
 * **Declarative** rendering (describe what UI should look like for a state)
 * **State-driven** updates
 
+Created by: Facebook (Meta)
+
+Used for:
+
+* SPAs (Single Page Applications)
+* Dashboards
+* Admin panels
+* E-commerce
+* Enterprise UIs
+* Mobile apps (React Native)
+
+
+## Difference Between JavaScript and React
+
+| Feature | JavaScript | React |
+|---|---|---|
+| Definition | A programming language used to build logic for web pages | A JavaScript library used to build user interfaces |
+| Type | Core language | Library built on top of JavaScript |
+| Purpose | Handles logic, DOM manipulation, events, calculations, API calls | Builds UI using reusable components |
+| Usage | Used in frontend, backend (Node.js), mobile, and desktop apps | Mainly used for building frontend UI |
+| Learning Order | Learn this first | Learn after understanding JavaScript |
+| DOM Handling | Direct DOM manipulation using `document.getElementById()` etc. | Uses Virtual DOM for faster updates |
+| Code Style | Imperative (tell step by step what to do) | Declarative (describe what UI should look like) |
+| Reusability | Functions can be reused | Components are reusable UI blocks |
+| Performance | Slower UI updates if DOM is updated frequently | Faster due to Virtual DOM diffing |
+| File Structure | No fixed structure | Component-based folder structure |
+| State Management | Manual handling using variables | Built-in state using hooks (`useState`) |
+| Event Handling | Direct JS event listeners | React synthetic events (`onClick`, `onChange`) |
+| Data Flow | Flexible, no strict pattern | One-way data flow (Parent → Child via props) |
+| Syntax | Plain JS syntax | JSX (HTML inside JavaScript) |
+| Example | `document.getElementById("title").innerText = "Hi"` | `<h1>{title}</h1>` |
+| Dependency | Runs in browser directly | Needs JavaScript to work |
+| Ecosystem | Very large (Node, Express, etc.) | Part of frontend ecosystem (Redux, Router, Hooks) |
+
+## Simple Summary
+
+- **JavaScript** = Language  
+- **React** = Library built using JavaScript  
+
+JavaScript controls:
+- Logic  
+- API calls  
+- DOM  
+
+React controls:
+- UI  
+- Components  
+- State-driven rendering  
+
 ## Setup & Tooling
 
 ### Create a React app (modern)
+Before you can build a React app, you need a starter environment that already has:
+- React installed
+- Development server
+- Folder structure
+- Build tools (so the app runs in the browser)
+
+Instead of creating all this manually, we use tools like Vite or Create React App (CRA).
 
 **Vite (recommended)**
 
@@ -34,19 +373,27 @@ npm start
 
 ### Project structure (typical)
 
+Inside your project, you’ll see a folder called src. This is where all your actual React code lives.
 ```
-src/main.jsx or src/index.js (entry)
-src/App.jsx (root component)
-src/components/ (reusable components)
-src/pages/ (route screens)
-src/hooks/ (custom hooks)
-src/services/ (API calls)
-src/utils/ (helpers)
+src/main.jsx or src/index.js (entry point, It connects: React → HTML page)
+
+
+src/App.jsx (root component, The main screen of your app, Everything starts here)
+src/components/ (reusable components, This folder stores small reusable UI parts. Examples: Button.jsx, Navbar.jsx, Card.jsx, UserProfile.jsx)
+
+src/pages/ (route screens, These represent full pages. Examples: Home.jsx, Login.jsx, Dashboard.jsx, Profile.jsx)
+
+src/hooks/ (custom hooks) - This folder stores reusable logic using React hooks. Example: useAuth.js, useFetch.js, useForm.js
+Purpose: Instead of repeating logic everywhere, you create a custom hook and reuse it.
+
+src/services/ (API calls) - This folder keeps backend communication code. Examples: userService.js, authService.js, postService.js
+Here you: Call APIs, Send data to server, Get data from server
+
+src/utils/ (helpers) - This folder contains small utility functions. Examples: formatDate.js, calculateAge.js, validateEmail.js
+These are pure JavaScript helpers used anywhere.
 ```
 
----
-
-## 2) JSX (React Syntax)
+## JSX (React Syntax)
 
 JSX looks like HTML but it’s JavaScript.
 
@@ -61,12 +408,10 @@ const name = "Siri";
 return <h1>Hello, {name}</h1>;
 ```
 
----
-
-## 3) Components
-
+## Components
+In React, components are reusable pieces of UI written as functions. 
 ### Functional Components (standard)
-
+A functional component simply returns JSX, like a Button that returns <button>Click</button>.
 ```jsx
 function Button() {
   return <button>Click</button>;
@@ -75,9 +420,7 @@ export default Button;
 ```
 
 ### Props (inputs to components)
-
-Props are read-only.
-
+Props are inputs passed from a parent component to a child component, and they are read-only. For example, UserCard receives name and role and displays them. 
 ```jsx
 function UserCard({ name, role }) {
   return <div>{name} — {role}</div>;
@@ -86,7 +429,7 @@ function UserCard({ name, role }) {
 ```
 
 ### Children prop
-
+children lets you pass content inside a component’s tags. The Card component wraps whatever is placed inside it, like <Card><p>Hello</p></Card>, and displays that content inside its layout.
 ```jsx
 function Card({ children }) {
   return <div className="card">{children}</div>;
@@ -94,10 +437,8 @@ function Card({ children }) {
 <Card><p>Hello</p></Card>
 ```
 
----
-
-## 4) Rendering Lists & Keys
-
+## Rendering Lists & Keys
+When you have an array of data and want to show it in UI, you use .map().
 ```jsx
 const items = ["A", "B", "C"];
 return (
@@ -108,14 +449,20 @@ return (
 ```
 
 ### Keys
-
+key helps React identify which item changed, added, or removed.
 * Must be stable & unique.
 * Avoid using array index as key if list order can change.
+```jsx
+//Bad
+<li key={index}>  
+```
+```jsx
+//Good
+<li key={item.id}>
+```
 
----
-
-## 5) Conditional Rendering
-
+## Conditional Rendering
+This means: show different UI based on a condition.
 ```jsx
 {isLoggedIn ? <Dashboard /> : <Login />}
 ```
@@ -125,12 +472,13 @@ Short-circuit:
 ```jsx
 {error && <p>{error}</p>}
 ```
+If error exists → show message
 
----
+If no error → show nothing
 
-## 6) State (useState)
+## State (useState)
 
-State = data that changes UI.
+State = data that can change and update the UI.
 
 ```jsx
 import { useState } from "react";
@@ -148,19 +496,24 @@ function Counter() {
 ```
 
 ### Functional updates (important for async / batching)
-
+Better way to update state:
 ```jsx
 setCount((prev) => prev + 1);
 ```
+Use this when: updating based on previous value
 
 ### Objects/arrays in state (immutability)
-
+Never change state directly.
 ✅ Do:
 
 ```jsx
 setUser((u) => ({ ...u, name: "New" }));
 setList((arr) => [...arr, "X"]);
 ```
+What happens:
+- Creates a new object/array
+- React sees change
+- Re-renders UI
 
 ❌ Don’t mutate:
 
@@ -168,10 +521,10 @@ setList((arr) => [...arr, "X"]);
 user.name = "New"; // wrong
 list.push("X");    // wrong
 ```
-
+React may not detect the change.
 ---
 
-## 7) Side Effects (useEffect)
+## Side Effects (useEffect)
 
 Use `useEffect` for:
 
@@ -179,6 +532,8 @@ Use `useEffect` for:
 * Subscriptions
 * Timers
 * Syncing with browser APIs
+* Local storage
+* DOM updates
 
 ```jsx
 import { useEffect, useState } from "react";
@@ -202,6 +557,7 @@ useEffect(() => {
   return () => clearInterval(id);
 }, []);
 ```
+This prevents: Memory leaks, Duplicate timers
 
 ### Fetch pattern
 
@@ -219,11 +575,10 @@ useEffect(() => {
   return () => { alive = false; };
 }, []);
 ```
+This avoids setting state if component unmounts.
 
----
-
-## 8) Events & Forms
-
+## Events & Forms
+React handles events like JavaScript but with JSX.
 ### Events
 
 ```jsx
@@ -231,7 +586,7 @@ useEffect(() => {
 ```
 
 ### Controlled input
-
+React controls the input value:
 ```jsx
 const [email, setEmail] = useState("");
 
@@ -254,13 +609,11 @@ function onSubmit(e) {
 </form>
 ```
 
----
-
-## 9) Refs (useRef)
+## Refs (useRef)
 
 Use refs to:
 
-* Access DOM elements
+* Access DOM elements directly
 * Keep mutable value without rerender
 
 ```jsx
@@ -277,10 +630,8 @@ const renderCount = useRef(0);
 renderCount.current += 1;
 ```
 
----
-
-## 10) Memoization (Performance)
-
+## Memoization (Performance)
+Used to prevent unnecessary re-renders.
 ### React.memo (memoize component)
 
 Prevents rerender if props didn’t change.
@@ -292,28 +643,33 @@ const Row = React.memo(function Row({ item }) {
 ```
 
 ### useMemo (memoize computed value)
+Stores computed values.
 
+Runs only when: list changes, q changes
 ```jsx
 const filtered = useMemo(() => heavyFilter(list, q), [list, q]);
 ```
 
 ### useCallback (memoize function reference)
-
+Stores function reference
 ```jsx
 const onSelect = useCallback((id) => setSelected(id), []);
 ```
 
 > Tip: Don’t overuse. Use when rerenders are actually costly.
 
----
-
-## 11) Context API (Global-ish state)
+## Context API (Global-ish state)
+Context API is used to share data across many components without passing props manually at every level.
 
 Good for:
+- Logged-in user info (auth)
+- Theme (dark/light)
+- Language settings
 
-* Theme
-* Auth user
-* Language
+How it works:
+- You create a Context
+- Wrap your app with a Provider
+- Any child component can access the data using useContext
 
 ```jsx
 const AuthContext = createContext(null);
@@ -332,10 +688,16 @@ function Profile() {
   return <div>{user?.name}</div>;
 }
 ```
+- AuthProvider stores the user in state
+- It shares { user, setUser } with all children
+- Profile reads the user using useContext(AuthContext)
+
+So instead of passing user → parent → child → child → child, Context lets any component directly access it.
 
 ---
 
-## 12) Routing (React Router)
+## Routing (React Router)
+Routing allows you to move between pages without reloading the website
 
 Install:
 
@@ -359,6 +721,18 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
   </Routes>
 </BrowserRouter>
 ```
+Example pages: 
+- / → Home
+- /about → About page
+
+Key parts:
+- BrowserRouter → enables routing
+- Routes → holds all routes
+- Route → defines each path
+- Link → used to navigate
+
+Example:
+- Clicking <Link to="/about"> takes you to About page.
 
 ### Params
 
@@ -366,10 +740,14 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 <Route path="/users/:id" element={<User />} />
 const { id } = useParams();
 ```
+You can read the ID from the URL.
 
----
+Used for:
+- Profile pages
+- Product details
+- Post pages
 
-## 13) Data Fetching (Best Practices)
+## Data Fetching (Best Practices)
 
 Common approaches:
 
@@ -396,19 +774,21 @@ Handles caching, retries, loading states.
 npm i @tanstack/react-query
 ```
 
----
+## State Management Options
+State = data that controls UI.
 
-## 14) State Management Options
+Local state  (Used inside one component.)
+- useState 
+- useReducer
 
-* useState / useReducer (component/local)
-* Context (app-wide simple)
-* Redux Toolkit (large apps, strict patterns)
-* Zustand (simple global store)
-* MobX (reactive style)
-* Recoil/Jotai (atom-based)
+App-wide state
+- Context (simple apps)
+- Redux Toolkit (large apps)
+- Zustand (easy global store)
+- MobX / Recoil (other styles)
 
 ### useReducer (complex state)
-
+Works like Redux but local.
 ```jsx
 function reducer(state, action) {
   switch(action.type) {
@@ -418,14 +798,19 @@ function reducer(state, action) {
 }
 const [state, dispatch] = useReducer(reducer, { count: 0 });
 ```
+Used when:
+- Many state changes
+- Complex updates
 
----
-
-## 15) Component Patterns You Must Know
+## Component Patterns You Must Know
 
 ### Lifting state up
 
-Move shared state to common parent and pass down as props.
+If two components need the same data:
+- Move state to their parent
+- Pass it down as props
+
+This keeps data in one place.
 
 ### Controlled vs Uncontrolled
 
@@ -439,7 +824,7 @@ Use children, slots, wrapper components.
 
 ---
 
-## 16) Hooks Rules (VERY IMPORTANT)
+## Hooks Rules (VERY IMPORTANT)
 
 Rules:
 
@@ -447,20 +832,20 @@ Rules:
 * Only call hooks inside React components or custom hooks.
 
 Common hooks:
+- useState → state
+- useEffect → side effects
+- useRef → DOM access
+- useMemo → cache value
+- useCallback → cache function
+- useContext → read global data
+- useReducer → complex state
 
-* useState
-* useEffect
-* useRef
-* useMemo
-* useCallback
-* useContext
-* useReducer
-* useLayoutEffect (rare)
-* useId, useTransition, useDeferredValue (advanced)
+Advanced:
+- useLayoutEffect
+- useTransition
+- useDeferredValue
 
----
-
-## 17) Custom Hooks
+## Custom Hooks
 
 Make reusable logic:
 
@@ -471,58 +856,87 @@ function useToggle(initial = false) {
   return [value, toggle];
 }
 ```
+Now any component can use:
 
----
+const [isOn, toggle] = useToggle();
 
-## 18) Error Boundaries
+This keeps logic clean and reusable.
 
-Catches render errors (class-based feature; many libs provide wrappers).
-React doesn’t catch:
+## Error Boundaries
 
-* async errors
-* event handler errors
+Error boundaries catch UI errors and prevent the whole app from crashing.
 
-by default.
+By default, React doesn’t catch: async errors, API errors, event handler errors
 
----
-
-## 19) React Rendering & Virtual DOM (Interview)
+## React Rendering & Virtual DOM (Interview)
 
 * React builds a virtual tree of UI.
 * On state/props change, React re-renders (recomputes UI).
 * Then React compares old vs new tree (diffing) and updates real DOM minimally (reconciliation).
 
-Re-render ≠ DOM repaint always.
+Re-render ≠ full page reload
+Re-render ≠ full DOM update
 
----
-
-## 20) Strict Mode (Dev behavior)
+## Strict Mode (Dev behavior)
 
 In React 18, StrictMode can run certain lifecycles/effects twice in development to find side-effect bugs. Production does not do this.
 
----
-
-## 21) Styling Options
-
+## Styling Options
+React doesn’t force one styling method. You can choose how to style your UI.
 * CSS / SCSS
-* CSS Modules
-* Tailwind CSS
-* Styled-components / Emotion
-* Component libraries (MUI, Chakra, AntD)
 
-### Tailwind example
+This is the normal way: Write styles in .css or .scss files. Import them into components
+```js
+import "./App.css";
+```
+SCSS is just advanced CSS with variables, nesting, etc.
 
+Good for: Simple projects, Traditional styling
+
+* CSS Modules : CSS Modules avoid style conflicts.
+```js
+//Button.module.css
+
+import styles from "./Button.module.css";
+
+<button className={styles.btn}>Click</button>
+
+```
+Benefit: Styles are scoped only to that component, No global conflicts
+
+* Tailwind CSS: Instead of writing CSS files, you use utility classes directly in JSX.
+```js
+<button className="bg-blue-500 text-white p-2 rounded">
+  Click
+</button>
+```
 ```bash
 npm i -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 ```
+Why people love Tailwind: Fast styling, No CSS file needed, Consistent design, Used in modern companies
 
----
+* Styled-components / Emotion: Write CSS inside JavaScript.
+```js
+const Button = styled.button`
+  background: blue;
+  color: white;
+`;
+```
+Benefits: Component-level styling, Dynamic styles using props
 
-## 22) Testing (React Testing Library)
+* Component libraries (MUI, Chakra, AntD) - Pre-built UI components you can use directly.
 
-Install:
+Popular ones: MUI (Material UI), Chakra UI, Ant Design
 
+They provide: Buttons, Forms, Modals, Tables, Layouts
+
+Good for: Faster development, Professional UI quickly
+
+## Testing (React Testing Library)
+Testing checks if your UI behaves correctly.
+
+You test things like: Button click, Text showing, Form submission
 ```bash
 npm i -D @testing-library/react @testing-library/jest-dom vitest jsdom
 ```
@@ -538,18 +952,173 @@ test("renders count", () => {
   expect(screen.getByText("0")).toBeInTheDocument();
 });
 ```
+What this does:
+- Renders the Counter component
+- Checks if "0" is visible on screen
 
----
-
-## 23) Security Basics
+## Security Basics
 
 * Prevent XSS: don’t dangerously inject HTML.
 * If you must use `dangerouslySetInnerHTML`, sanitize content.
 * Use HTTPS, secure cookies, CSRF protections (backend).
 
----
+# Prop Drilling Problem
 
-## 24) Common  Q&A (Quick)
+Passing props through many layers.
+
+Solved using:
+
+* Context
+* Redux
+
+# Routing
+
+Navigate between pages.
+
+Library:
+
+react-router-dom
+
+# Nested Routes
+
+Route inside route.
+
+# Axios
+
+Better alternative to fetch.
+
+# React.memo
+
+Prevents unnecessary re-renders.
+
+# Code Splitting
+
+Split bundles into smaller chunks.
+
+# Higher Order Components (HOC)
+
+Component that wraps another component.
+
+# Redux Core Concepts
+- Store
+- Actions
+- Reducers
+
+# Forms Libraries
+
+- Formik
+- React Hook Form
+
+# Authentication Flow
+
+Login → Store token → Protect routes
+
+# 45. Protected Routes
+
+Restrict access if not logged in.
+
+# LocalStorage in React
+
+Store tokens/settings.
+
+# SSR vs CSR
+
+CSR:
+React SPA
+
+SSR:
+Next.js
+
+# Next.js (VERY IMPORTANT)
+
+Production React framework.
+
+Features:
+
+* SSR
+* SEO
+* Routing
+* Performance
+
+# Static Site Generation
+
+Pre-build pages.
+
+# Hydration
+
+Attach JS to server-rendered HTML.
+
+# Micro-Frontend Architecture
+
+Split frontend into multiple apps.
+
+# Testing React
+
+- Jest
+- React Testing Library
+
+# Performance Metrics
+- TTI
+- LCP
+- CLS
+
+# Accessibility in React
+
+- ARIA labels
+- Keyboard navigation
+
+# Internationalization
+
+Multi-language support.
+
+# Deployment
+
+- Netlify
+- Vercel
+- AWS
+
+# Build Tools
+
+- Webpack
+- Vite
+
+# React DevTools
+
+Inspect components/state.
+
+# Common React Mistakes
+
+* Missing keys
+* Too many re-renders
+* Mutating state
+
+# Real Production Architecture
+
+* API layer
+* State layer
+* UI layer
+* Routing layer
+
+# React System Design Thinking
+
+Think in:
+
+* Components
+* State flow
+* Data flow
+
+# React Mastery Definition
+
+You master React when you understand:
+
+* Component design
+* State architecture
+* Performance optimization
+* Hooks deeply
+* Routing
+* Data fetching
+
+## ommon  Q&A (Quick)
 
 **Q: Props vs State?**
 Props = inputs from parent. State = internal data that changes UI.
@@ -569,9 +1138,7 @@ State change, props change, context change, parent rerender.
 **Q: How to optimize rerenders?**
 Memoize heavy components (memo), memoize expensive computations (useMemo), stable callbacks (useCallback), split components, avoid unnecessary state.
 
----
-
-## 25) Mini Cheat Sheet (1 page)
+## Mini Cheat Sheet
 
 * useState: local state
 * useEffect(fn, []): run once + cleanup
@@ -583,592 +1150,3 @@ Memoize heavy components (memo), memoize expensive computations (useMemo), stabl
 * Context: global-ish state
 * Immutable updates: `{...obj}`, `[...arr]`
 * List key: stable unique id
-
-
-## (Basic → Intermediate → Advanced → Expert → Production → System Design → Architect Level)
-
-React is the most widely used frontend library for building modern web applications.
-
-Created by: Facebook (Meta)
-
-Used for:
-
-* SPAs (Single Page Applications)
-* Dashboards
-* Admin panels
-* E-commerce
-* Enterprise UIs
-* Mobile apps (React Native)
-
-This guide covers EVERYTHING from:
-**Beginner → Advanced → Performance → Architecture → Industry level**
-
----
-
-# 📌 1. What is React?
-
-React is a JavaScript library for building UI using:
-
-Component-based architecture.
-
----
-
-# 📌 2. Why React?
-
-Problems before React:
-
-* Manual DOM manipulation
-* Hard-to-maintain UI code
-* Performance issues
-
-React solves:
-
-* Reusable components
-* Fast UI updates
-* Clean structure
-
----
-
-# 📌 3. Core Idea of React
-
-UI = Function(State)
-
-Change state → UI updates automatically.
-
----
-
-# 📌 4. Virtual DOM (VERY IMPORTANT)
-
-React does NOT update real DOM directly.
-
-Process:
-
-1. Create virtual DOM
-2. Compare changes (diffing)
-3. Update only changed parts
-
-Result:
-
-* Faster rendering
-* Better performance
-
----
-
-# 📌 5. Components
-
-React apps are made of components.
-
-Types:
-
-* Functional components (modern)
-* Class components (older)
-
----
-
-# 📌 6. Functional Component
-
-```jsx
-function Hello() {
-  return <h1>Hello</h1>;
-}
-```
-
----
-
-# 📌 7. JSX (JavaScript XML)
-
-Allows writing HTML inside JS.
-
-```jsx
-const el = <h1>Hello</h1>;
-```
-
----
-
-# 📌 8. Props
-
-Props = Data passed to component.
-
-```jsx
-function User(props) {
-  return <h2>{props.name}</h2>;
-}
-```
-
----
-
-# 📌 9. State
-
-State = Data inside component.
-
-```jsx
-const [count, setCount] = useState(0);
-```
-
----
-
-# 📌 10. Hooks (MOST IMPORTANT PART)
-
-Hooks allow functional components to use features like state.
-
-Main hooks:
-
-* useState
-* useEffect
-* useContext
-* useMemo
-* useCallback
-* useRef
-
----
-
-# 📌 11. useState
-
-Stores state.
-
-```jsx
-const [count, setCount] = useState(0);
-```
-
----
-
-# 📌 12. useEffect
-
-Runs side effects.
-
-Examples:
-
-* API calls
-* Event listeners
-
-```jsx
-useEffect(() => {
-  console.log("Mounted");
-}, []);
-```
-
----
-
-# 📌 13. Lifecycle in Functional Components
-
-Mount
-Update
-Unmount
-
-Handled using:
-
-useEffect
-
----
-
-# 📌 14. Event Handling
-
-```jsx
-<button onClick={handleClick}>
-```
-
----
-
-# 📌 15. Conditional Rendering
-
-```jsx
-{isLoggedIn ? <Dashboard /> : <Login />}
-```
-
----
-
-# 📌 16. Lists Rendering
-
-```jsx
-users.map(u => <p key={u.id}>{u.name}</p>)
-```
-
----
-
-# 📌 17. Keys (IMPORTANT)
-
-Help React identify elements.
-
-Must be:
-
-* Unique
-* Stable
-
----
-
-# 📌 18. Forms in React
-
-Controlled components:
-
-```jsx
-<input value={name} onChange={...} />
-```
-
----
-
-# 📌 19. Lifting State Up
-
-Share state between components.
-
-Move state to parent.
-
----
-
-# 📌 20. useContext
-
-Global state without prop drilling.
-
----
-
-# 📌 21. Prop Drilling Problem
-
-Passing props through many layers.
-
-Solved using:
-
-* Context
-* Redux
-
----
-
-# 📌 22. Routing
-
-Navigate between pages.
-
-Library:
-
-react-router-dom
-
----
-
-# 📌 23. Nested Routes
-
-Route inside route.
-
----
-
-# 📌 24. Dynamic Routes
-
-Example:
-
-/user/:id
-
----
-
-# 📌 25. API Calls
-
-```jsx
-useEffect(() => {
-  fetch("/api/users")
-}, []);
-```
-
----
-
-# 📌 26. Axios
-
-Better alternative to fetch.
-
----
-
-# 📌 27. Performance Optimization
-
-Important in large apps.
-
----
-
-# 📌 28. React.memo
-
-Prevents unnecessary re-renders.
-
----
-
-# 📌 29. useMemo
-
-Memoizes values.
-
----
-
-# 📌 30. useCallback
-
-Memoizes functions.
-
----
-
-# 📌 31. useRef
-
-Stores values without re-render.
-
----
-
-# 📌 32. Lazy Loading
-
-Load components when needed.
-
-```jsx
-const Page = React.lazy(...)
-```
-
----
-
-# 📌 33. Code Splitting
-
-Split bundles into smaller chunks.
-
----
-
-# 📌 34. Error Boundaries
-
-Catch UI errors.
-
----
-
-# 📌 35. Higher Order Components (HOC)
-
-Component that wraps another component.
-
----
-
-# 📌 36. Render Props Pattern
-
-Share logic between components.
-
----
-
-# 📌 37. Custom Hooks
-
-Create reusable logic.
-
----
-
-# 📌 38. State Management Libraries
-
-Redux
-Zustand
-MobX
-Recoil
-
----
-
-# 📌 39. Redux Core Concepts
-
-Store
-Actions
-Reducers
-
----
-
-# 📌 40. Redux Toolkit (Modern Way)
-
-Simpler Redux setup.
-
----
-
-# 📌 41. Styling in React
-
-CSS
-SCSS
-Tailwind
-Styled-components
-
----
-
-# 📌 42. CSS Modules
-
-Scoped styles.
-
----
-
-# 📌 43. Forms Libraries
-
-Formik
-React Hook Form
-
----
-
-# 📌 44. Authentication Flow
-
-Login → Store token → Protect routes
-
----
-
-# 📌 45. Protected Routes
-
-Restrict access if not logged in.
-
----
-
-# 📌 46. LocalStorage in React
-
-Store tokens/settings.
-
----
-
-# 📌 47. SSR vs CSR
-
-CSR:
-React SPA
-
-SSR:
-Next.js
-
----
-
-# 📌 48. Next.js (VERY IMPORTANT)
-
-Production React framework.
-
-Features:
-
-* SSR
-* SEO
-* Routing
-* Performance
-
----
-
-# 📌 49. Static Site Generation
-
-Pre-build pages.
-
----
-
-# 📌 50. Hydration
-
-Attach JS to server-rendered HTML.
-
----
-
-# 📌 51. Micro-Frontend Architecture
-
-Split frontend into multiple apps.
-
----
-
-# 📌 52. Testing React
-
-Jest
-React Testing Library
-
----
-
-# 📌 53. Performance Metrics
-
-TTI
-LCP
-CLS
-
----
-
-# 📌 54. Accessibility in React
-
-ARIA labels
-Keyboard navigation
-
----
-
-# 📌 55. Internationalization
-
-Multi-language support.
-
----
-
-# 📌 56. Deployment
-
-Netlify
-Vercel
-AWS
-
----
-
-# 📌 57. Build Tools
-
-Webpack
-Vite
-
----
-
-# 📌 58. React DevTools
-
-Inspect components/state.
-
----
-
-# 📌 59. Common React Mistakes
-
-* Missing keys
-* Too many re-renders
-* Mutating state
-
----
-
-# 📌 60. Large App Folder Structure
-
-```
-src/
- ├── components/
- ├── pages/
- ├── hooks/
- ├── services/
- ├── store/
- ├── utils/
-```
-
----
-
-# 📌 61. Real Production Architecture
-
-* API layer
-* State layer
-* UI layer
-* Routing layer
-
----
-
-# 📌 62. React System Design Thinking
-
-Think in:
-
-* Components
-* State flow
-* Data flow
-
----
-
-# 📌 63. Performance Killers
-
-* Large state objects
-* Unnecessary renders
-* Heavy DOM trees
-
----
-
-# 📌 64. React Security
-
-XSS prevention
-Token safety
-
----
-
-# 📌 65. React Mastery Definition
-
-You master React when you understand:
-
-* Component design
-* State architecture
-* Performance optimization
-* Hooks deeply
-* Routing
-* Data fetching
-
----
-
-# 📌 66. Final Truth
-
-React is not just a UI library.
-
-It is:
-
-* A UI architecture system
-* A performance engine
-* A large-scale frontend platform
