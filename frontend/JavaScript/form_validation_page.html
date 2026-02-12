@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form</title>
+</head>
+<body>
+
+<form onsubmit="return validate()">
+  <input type="text" id="name" placeholder="Enter name">
+  <button type="submit">Submit</button>
+</form>
+
+<p id="error" style="color:red;"></p>
+
+<script>
+function validate() {
+  const name = document.getElementById("name").value;
+
+  if (name.length < 3) {
+    document.getElementById("error").innerText =
+      "Name must be at least 3 characters";
+    return false;
+  }
+
+  alert("Form submitted");
+  return true;
+}
+</script>
+
+</body>
+</html>

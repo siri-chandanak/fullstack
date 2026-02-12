@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Filter</title>
+</head>
+<body>
+
+<input type="text" id="search" placeholder="Search..." onkeyup="filterList()">
+
+<ul id="list1">
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Mango</li>
+  <li>Orange</li>
+</ul>
+
+<script>
+function filterList() {
+  const input = document.getElementById("search").value.toLowerCase();
+  const items = document.querySelectorAll("#list1 li");
+
+  items.forEach(item => {
+    item.style.display =
+      item.innerText.toLowerCase().includes(input)
+        ? ""
+        : "none";
+  });
+}
+</script>
+
+</body>
+</html>

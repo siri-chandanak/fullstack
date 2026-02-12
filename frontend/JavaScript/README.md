@@ -155,15 +155,11 @@ Boolean(1)
 
 # 📌 10. Operators
 
-Arithmetic:
+Arithmetic: +, *, /, %
 
-+, *, /, %
+Comparison: ==, ===, !=, !==, >, <
 
-Comparison:
-== === != !== > <
-
-Logical:
-&& || !
+Logical: &&, ||, !
 
 ---
 
@@ -263,7 +259,7 @@ console.log(p1.name);
 
 # 📌 16. Objects
 
-```
+```js
 const user = {
   name: "John",
   age: 25
@@ -272,7 +268,7 @@ const user = {
 
 Access:
 
-```
+```js
 user.name
 user["name"]
 ```
@@ -281,7 +277,7 @@ user["name"]
 
 # 📌 17. Arrays
 
-```
+```js
 const arr = [1, 2, 3];
 ```
 
@@ -291,11 +287,11 @@ Methods: push(), pop(), map(), filter(), reduce()
 
 # 📌 18. Loops
 
-```
+```js
 for (let i = 0; i < 5; i++) {}
 ```
 
-```
+```js
 for (let item of arr) {}
 ```
 
@@ -309,6 +305,24 @@ Allows JS to:
 
 * Change HTML
 * Handle events
+```js
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2 id="title">Hello</h2>
+<button onclick="changeText()">Click Me</button>
+
+<script>
+  function changeText() {
+    // Change HTML content using DOM
+    document.getElementById("title").innerHTML = "Hello Siri!";
+  }
+</script>
+
+</body>
+</html>
+```
 
 ---
 
@@ -477,17 +491,15 @@ async function load() {
 # 📌 33. Event Loop (VERY IMPORTANT)
 
  Manages execution by moving completed async tasks from the queue to the call stack when it’s free.
-Handles:
 
+Handles:
 * Async tasks
 * Callbacks
 
 Queues:
-
 * Call stack
 * Microtask queue
 * Task queue
-
 ---
 
 # 📌 34. Microtask vs Task Queue
@@ -534,8 +546,8 @@ try {
 # 📌 36. JSON Handling
 
 Used to convert between JSON strings and JavaScript objects.
-JSON.parse() – Converts a JSON string into a JavaScript object.
-JSON.stringify() – Converts a JavaScript object into a JSON string.
+- JSON.parse() – Converts a JSON string into a JavaScript object.
+- JSON.stringify() – Converts a JavaScript object into a JSON string.
 ```js
 const str = '{"name":"Siri","age":24}';
 const obj = JSON.parse(str);
@@ -572,7 +584,7 @@ console.log(sessionStorage.getItem("user"));
 
 # 📌 38. Fetch API
 
-```
+```js
 fetch(url)
   .then(res => res.json())
 ```
@@ -586,13 +598,13 @@ fetch(url) → Sends an HTTP request to the given URL.
 
 # 📌 39. Node.js Basics
 
-Node.js Basics: Node.js lets JavaScript run outside the browser, mainly to build backend/server applications.
+Node.js lets JavaScript run outside the browser, mainly to build backend/server applications.
 
 ---
 
 # 📌 40. Node Core Modules
 
-Node Core Modules: Built-in modules in Node.js that help perform common system and server tasks without installing anything extra.
+Built-in modules in Node.js that help perform common system and server tasks without installing anything extra.
 - fs (File System): Used to read, write, update, and delete files.
 - http: Used to create web servers and handle HTTP requests/responses.
 - path: Helps work with file and folder paths (join, resolve, get file names).
@@ -638,181 +650,395 @@ npm install express
 
 # 📌 42. Express.js
 
-Backend framework.
+Express.js: A fast, minimal backend framework for Node.js used to build web servers and APIs easily.
 
 Used for:
+- APIs: Create REST endpoints to send/receive data.
+- Servers: Handle HTTP requests, routing, and responses.
 
-* APIs
-* Servers
+```js
+const express = require("express");
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello from Express");
+});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
+
+```
 
 ---
 
 # 📌 43. REST API in JS
 
-Used with:
+REST API in JS: A way to send and receive data between frontend and backend using HTTP methods (GET, POST, PUT, DELETE).
 
-* Express
-* Fetch
+Built using Express (backend):
+```js
+const express = require("express");
+const app = express();
 
+app.get("/api/users", (req, res) => {
+  res.json([{ name: "Siri" }, { name: "John" }]);
+});
+
+app.listen(3000);
+```
+Consumed using Fetch (frontend):
+```js
+fetch("http://localhost:3000/api/users")
+  .then(res => res.json())
+  .then(data => console.log(data));
+
+```
 ---
 
 # 📌 44. JavaScript Memory Model
 
-Stack:
-Primitive values
-
-Heap:
-Objects
+- Stack: Stores primitive values (number, string, boolean, null, undefined) and function call data; it is fast and fixed in size.
+- Heap: Stores objects, arrays, and functions; it is larger and used for dynamic memory allocation.
 
 ---
 
 # 📌 45. Garbage Collection
 
-Automatic memory cleanup.
+JavaScript automatically frees memory by removing objects and variables that are no longer being used or referenced.
 
 ---
 
 # 📌 46. Shallow vs Deep Copy
 
-Shallow:
-Copies reference
+Shallow Copy: Creates a new object but copies references of nested objects, so changes in nested data affect both copies.
 
-Deep:
-Copies values
+Deep Copy: Creates a completely independent copy, duplicating all values (including nested objects), so changes don’t affect the original.
 
 ---
 
 # 📌 47. Destructuring
+Destructuring: A shortcut to extract values from objects or arrays into variables.
+```js
+const user = { name: "Siri", age: 24 };
 
+const { name } = user;
+
+console.log(name); // Siri
 ```
-const {name} = user;
-```
+{name} picks the name property from the user object and stores it in a variable called name.
 
 ---
 
 # 📌 48. Spread Operator
-
-```
+Expands elements of an array or object to copy or merge them.
+```js
+const arr = [1, 2, 3];
 const newArr = [...arr];
+
+console.log(newArr); // [1, 2, 3]
+```
+[...arr] creates a shallow copy of arr by spreading all its elements into a new array.
+```js
+const user = { name: "Siri", age: 24 };
+
+const updatedUser = { ...user, city: "Tampa" };
+
+console.log(updatedUser);
+// { name: "Siri", age: 24, city: "Tampa" }
 ```
 
 ---
 
 # 📌 49. Rest Operator
+Collects multiple arguments into a single array.
+```js
+function sum(...nums) {
+  return nums.reduce((total, n) => total + n, 0);
+}
+
+console.log(sum(1, 2, 3, 4)); // 10
 
 ```
-function sum(...nums) {}
-```
+Meaning: All passed values are gathered into nums as an array: [1,2,3,4].
+...nums → rest operator. It collects all arguments passed into the function into one array called nums.
+
+reduce() is an array method used to combine all values into a single result.
+
+`array.reduce((accumulator, currentValue) => result, initialValue)`
+- total → accumulator (stores running sum)
+- n → current number from array
+- 0 → starting value
 
 ---
 
 # 📌 50. Template Literals
+Use backticks to insert variables into strings.
+```js
+const name = "Siri";
+const msg = `Hello ${name}`;
 
-```
-`Hello ${name}`
+console.log(msg); // Hello Siri
+
 ```
 
 ---
 
 # 📌 51. Map & Set
 
-Map:
-Key-value store
+Map: Key-value store, Stores data as key–value pairs; keys can be any type.
 
-Set:
-Unique values
+Set: Unique values, Stores values without duplicates.
+
+```js
+const map = new Map();
+map.set("name", "Siri");
+map.set(1, "ID");
+
+console.log(map.get("name")); // Siri
+
+const set = new Set([1, 2, 2, 3]);
+console.log(set); // Set {1, 2, 3}
+
+```
 
 ---
 
 # 📌 52. WeakMap / WeakSet
 
-Memory-efficient structures.
+WeakMap (Memory-efficient key–value): Keys must be objects; removed automatically if the object is no longer used.
 
+WeakSet (Memory-efficient unique objects): Stores only objects; removed when objects are no longer referenced.
+
+```js
+const weakMap = new WeakMap();
+let user = { name: "Siri" };
+
+weakMap.set(user, "active");
+console.log(weakMap.get(user)); // active
+
+user = null; // object can be garbage collected
+
+const weakSet = new WeakSet();
+let obj = { id: 1 };
+
+weakSet.add(obj);
+console.log(weakSet.has(obj)); // true
+
+obj = null; // eligible for garbage collection
+```
 ---
 
 # 📌 53. Functional Programming
 
-map()
-filter()
-reduce()
+map(), filter(), reduce() - These are array methods used to process data in a clean, reusable way.
+- map() → transform each item
+Creates a new array by changing every element.
+```js
+const nums = [1, 2, 3];
+
+const doubled = nums.map(n => n * 2);
+console.log(doubled); // [2, 4, 6]
+```
+
+- filter() → select items
+Returns only items that match a condition.
+```js
+const nums = [1, 2, 3, 4];
+
+const even = nums.filter(n => n % 2 === 0);
+console.log(even); // [2, 4]
+```
+- reduce() → combine into one value
+Used for sum, count, grouping, etc.
+```js
+const nums = [1, 2, 3, 4];
+
+const sum = nums.reduce((total, n) => total + n, 0);
+console.log(sum); // 10
+```
 
 ---
 
 # 📌 54. Debouncing & Throttling
 
-Optimize:
+Used to control how often a function runs when events fire too many times (scroll, typing, resize).
 
-Frequent events.
+- Debouncing → runs after user stops
+Example: search bar
+```js
+let timer;
+function search() {
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    console.log("Searching...");
+  }, 500);
+}
+```
+If the user keeps typing, the function waits. It runs only after they stop.
+
+- Throttling → runs every X time
+Example: scroll event
+```js
+let lastRun = 0;
+function throttle() {
+  const now = Date.now();
+  if (now - lastRun > 1000) {
+    console.log("Running...");
+    lastRun = now;
+  }
+}
+```
+Runs at most once per second.
 
 ---
 
 # 📌 55. Security Topics
+- XSS (Cross-Site Scripting):
+Attacker injects malicious script into your website.
+Example:
+```html
+<input value="<script>alert('hack')</script>">
+```
+Fix: sanitize user input.
 
-XSS
-CSRF
-Injection attacks
+- CSRF (Cross-Site Request Forgery):
+Attacker tricks a logged-in user into making unwanted requests.
+Example:
+
+`User is logged in → attacker sends hidden request to transfer money.`
+
+Fix: use CSRF tokens.
+
+- Injection attacks (SQL Injection):
+Attacker inserts harmful code into inputs.
+
+Example:
+```sql
+username: admin' OR '1'='1
+```
+Fix: Use parameterized queries, Validate input
 
 ---
 
 # 📌 56. Performance Optimization
 
-* Avoid memory leaks
-* Minimize DOM updates
-* Use lazy loading
+* Avoid memory leaks: Don’t keep unused objects, timers, or event listeners.
+
+`setInterval(() => console.log("running"), 1000);`
+* Minimize DOM updates: DOM changes are slow. Update once instead of many times.
+* Use lazy loading: Load content only when needed.
 
 ---
 
 # 📌 57. JavaScript Frameworks
+These help build large frontend apps faster.
 
-React
-Angular
-Vue
+## React
+- Most popular
+- Component-based UI
+- Used by Facebook, Netflix
+
+## Angular
+- Full framework by Google
+- Built-in routing, forms, structure
+## Vue
+- Easy to learn
+- Lightweight
+- Clean syntax
+
+HTML → structure
+
+JS → logic
+
+Frameworks → organized way to build big apps
 
 ---
 
 # 📌 58. TypeScript (Important Modern JS)
 
-Adds:
+TypeScript is JavaScript with added types and safety checks before running.
 
-* Types
-* Compile-time safety
+Adds types:
+```js
+function add(a: number, b: number): number {
+  return a + b;
+}
+```
+Compile-time safety: Errors are caught before running the code.
 
 ---
 
 # 📌 59. Browser Storage
 
-LocalStorage
-SessionStorage
-Cookies
+Used to store data in the user's browser.
+
+- LocalStorage(permanent): Data stays even after closing the browser
+- SessionStorage(temporary): Data is removed when the tab is closed.
+- Cookies: Small data stored and sent to server with every request.
+
+```js
+localStorage.setItem("name", "Siri");
+console.log(localStorage.getItem("name"));
+
+sessionStorage.setItem("user", "John");
+
+document.cookie = "theme=dark";
+```
 
 ---
 
 # 📌 60. WebSockets
 
-Real-time communication.
+Used for real-time communication between client and server.
+Examples: Chat apps, Live notifications, Stock price updates
+```js
+const socket = new WebSocket("ws://example.com");
+
+socket.onmessage = (event) => {
+  console.log(event.data);
+};
+```
+Connection stays open and data flows continuously.
 
 ---
 
 # 📌 61. Service Workers
 
-Enable:
+Background scripts that run in the browser to enable advanced features.
 
-Offline apps.
+Used for:
+- Offline apps
+- Caching pages
+- Push notifications
+
+Example idea:
+- User opens app once
+- Service worker saves files
+- App works even without internet
 
 ---
 
 # 📌 62. Testing Tools
 
-Jest
-Mocha
+Used to test code automatically.
+- Jest: Popular for React and JS apps, Used for unit testing
+- Mocha: Flexible testing framework, Often used with Chai
+```js
+test("adds numbers", () => {
+  expect(2 + 2).toBe(4);
+});
+```
 
 ---
 
 # 📌 63. Build Tools
+Used to prepare JS apps for production.
+- Webpack: Bundles many files into one
+- Vite: Fast development server and bundler
+- Babel: Converts modern JS into older JS so all browsers can run it
 
-Webpack
-Vite
-Babel
+Example: ES6 code → Babel → compatible ES5 code
 
 ---
 
@@ -820,11 +1046,11 @@ Babel
 
 You master JavaScript when you understand:
 
-* Closures
-* Event loop
-* Async programming
-* Prototypes
-* Memory model
+* Closures: Functions remembering parent variables.
+* Event loop: How JS handles async tasks and queues.
+* Async programming: Promises, async/await, callbacks.
+* Prototypes: How objects inherit from other objects.
+* Memory model: Stack vs Heap, garbage collection, references.
 
 ---
 
@@ -843,20 +1069,6 @@ It powers most modern applications on the internet.
 
 ## (Hidden Internals, Engine Behavior, Edge Cases, Performance, Production, Architect-Level)
 
-You already covered:
-
-* Syntax
-* Functions
-* Closures
-* Async/await
-* Promises
-* DOM
-* Node.js basics
-* Memory model
-* Prototypes
-* Classes
-* Modules
-
 Now this section contains the **remaining deep + expert-level JavaScript knowledge** — the things that:
 
 * Senior frontend/backend JS engineers know
@@ -864,45 +1076,56 @@ Now this section contains the **remaining deep + expert-level JavaScript knowled
 * Performance teams optimize
 * Interviewers test for deep understanding
 
-This completes JavaScript from:
-**Basic → Advanced → Engine → Performance → Architect level**
-
 ---
 
 # 📌 66. Execution Context (VERY IMPORTANT CORE CONCEPT)
 
-Every JS code runs inside:
-
-Execution Context.
+Every JS code runs inside an `Execution Context`.
 
 Types:
 
-* Global Execution Context
-* Function Execution Context
+* Global Execution Context: Created when the JS file starts running. (Created once, Represents the whole program)
+* Function Execution Context: Created every time a function is called.
 
 Each context has:
 
-* Variable environment
-* Scope chain
-* "this" binding
+* Variable environment (Stores variables & functions.)
+* Scope chain (Where JS looks for variables.)
+* "this" binding (Value of this keyword.)
 
 ---
 
 # 📌 67. Call Stack (Engine Behavior)
 
-JavaScript is:
+JavaScript is `Single-threaded`.
 
-Single-threaded.
+Uses a call stack to track function calls.
 
-Uses a call stack:
+```js
+function func2() {
+  console.log("func2");
+}
+
+function func1() {
+  func2();
+}
+
+func1();
 
 ```
-main()
+Stack flow
+```scss
+Global()
   -> func1()
-     -> func2()
+       -> func2()
 ```
 
-LIFO execution.
+Execurion Order: LIFO 
+```sql
+func2 runs
+func1 finishes
+Global finishes
+```
 
 ---
 
@@ -910,48 +1133,58 @@ LIFO execution.
 
 When JS runs:
 
-Phase 1:
-Memory allocated.
+Phase 1: Memory allocated. --> JS scans the code and allocates memory.
 
-Phase 2:
-Code executed.
+Phase 2: Code executed. --> Now code runs line by line.
 
 Example:
 
-```
+```js
 console.log(a);
 var a = 10;
 ```
 
-Due to hoisting:
-
-a exists but is undefined.
+Due to hoisting: a exists but is undefined.
 
 ---
 
 # 📌 69. Temporal Dead Zone (TDZ)
 
-For let & const:
+Only For let & const. 
 
 Variable exists but cannot be accessed before declaration.
 
-```
+```js
 console.log(a);
 let a = 10; // Error
 ```
+a exists in memory, but cannot be accessed yet.
+
+This period is called: Temporal Dead Zone (From start of scope → until declaration line.)
 
 ---
 
 # 📌 70. Hoisting Deep Reality
 
-var:
-Hoisted with undefined.
+var: Hoisted, Initialized as undefined.
 
-let/const:
-Hoisted but in TDZ.
+let/const: Hoisted but in TDZ. Cannot use before declaration
 
-functions:
-Fully hoisted.
+functions: Fully hoisted.
+
+```js
+console.log(a);
+var a = 5; //Undefined
+
+console.log(a);
+let a = 5; //error
+
+sayHi();  // Hi
+
+function sayHi() {
+  console.log("Hi");
+}
+```
 
 ---
 
@@ -959,66 +1192,130 @@ Fully hoisted.
 
 If variable not found:
 
-JS searches:
+JS searches like: Current scope → Parent → Global
+```js
+let a = 10;
 
-Current scope → Parent → Global
+function outer() {
+  function inner() {
+    console.log(a);
+  }
+  inner();
+}
+
+outer();
+```
+- Inside inner() → not found
+- Inside outer() → not found
+- Global → found a = 10
 
 ---
 
 # 📌 72. Lexical Scope
 
-Scope defined by:
+Scope defined by: Where function is written, Not where it is called.
+```js
+let a = 10;
 
-Where function is written.
+function outer() {
+  let a = 20;
 
-Not where it is called.
+  function inner() {
+    console.log(a);
+  }
+
+  return inner;
+}
+
+const fn = outer();
+fn(); //20
+```
 
 ---
 
 # 📌 73. Closures Deep Internals
 
-Closure stores:
+Closure stores: Reference to outer variables, Not value.
+```js
+function outer() {
+  let x = 10;
 
-Reference to outer variables.
+  return function inner() {
+    console.log(x);
+  };
+}
 
-Not value.
+const fn = outer();
+fn(); // 10
+```
+Even after outer() finishes, x still exists because: inner() holds a reference to it. So memory is not cleared
+```js
+function outer() {
+  let x = 10;
+
+  return function inner() {
+    x++;
+    console.log(x);
+  };
+}
+
+const fn = outer();
+fn(); // 11
+fn(); // 12
+```
+
+---
+
+# V8
+
+V8 is Google’s JavaScript engine (the “brain” that runs JavaScript code).
+
+Where it runs:
+- Chrome browser
+- Node.js (so JS can run on servers)
+
+What V8 does (simple):
+- Parses your JS code (reads it)
+- Compiles it (JIT: “Just-In-Time” compilation into machine code)
+- Executes it fast
+- Manages memory (garbage collection)
+- So without an engine like V8, JavaScript code can’t run.
 
 ---
 
 # 📌 74. Garbage Collection Internals
 
-V8 uses:
+V8 uses: Mark-and-sweep algorithm, Removes Unreachable objects.
 
-Mark-and-sweep algorithm.
+Mark: JS marks all objects that are still reachable.
 
-Removes:
+Example: Global variables, Active function variables, Objects referenced by closures
 
-Unreachable objects.
+Sweep: Removes objects that are NOT reachable.
 
 ---
 
 # 📌 75. Memory Leaks in JavaScript
 
+Memory that should be freed but isn’t. 
+
 Common causes:
 
-* Unremoved event listeners
-* Global variables
+* Unremoved event listeners (If the button is removed but listener stays → memory leak.))
+* Global variables  
 * Closures holding references
 
 ---
 
 # 📌 76. Event Loop Deep Internals
 
-JS runtime has:
-
-Call Stack
-Web APIs
-Callback Queue
-Microtask Queue
+JS runtime has: Call Stack, Web APIs, Callback Queue(Task queue), Microtask Queue
 
 Flow:
-
-Stack empty → Execute microtasks → Execute tasks.
+- Code goes to Call Stack
+- Async tasks go to Web APIs
+- When finished: Promises → Microtask Queue, setTimeout → Task Queue
+- When stack is empty: Run Microtasks first, Then Tasks
 
 ---
 
@@ -1034,23 +1331,16 @@ Execution order:
 
 # 📌 78. setTimeout Reality
 
-```
+```js
 setTimeout(fn, 0)
 ```
-
-Does NOT mean immediate.
-
-It waits until:
-
-Call stack is empty.
+Does NOT mean immediate. It means `Run when call stack becomes empty`.
 
 ---
 
 # 📌 79. Promise Internals
 
-Promise callbacks go to:
-
-Microtask queue.
+Promise callbacks go to: Microtask queue.
 
 That’s why they run before setTimeout.
 
@@ -1058,13 +1348,25 @@ That’s why they run before setTimeout.
 
 # 📌 80. Async/Await Internals
 
-async function returns:
-
-A Promise automatically.
-
-await pauses:
-
-Inside function only.
+```js
+async function test() {
+  return 5;
+}
+```
+This actually returns:
+```js
+Promise {5}
+```
+await behavior
+```js
+async function test() {
+  await Promise.resolve();
+  console.log("Hello");
+}
+```
+await:
+- Pauses ONLY inside the async function
+- Does NOT block whole program
 
 ---
 
@@ -1078,206 +1380,381 @@ Cases:
 * Method call → object
 * Arrow function → lexical this
 * call/apply/bind → manual control
+```js
+//Global
+console.log(this);
+//In browser → window
+
+//Method call
+const obj = {
+  name: "Siri",
+  show() {
+    console.log(this.name);
+  }
+};
+
+obj.show();
+//this = obj
+
+//Arrow function: Arrow functions don’t have their own this. They use parent this.
+const obj = {
+  name: "Siri",
+  show: () => {
+    console.log(this.name);
+  }
+};
+//Here this = global, not obj.
+
+//call / apply / bind: Used to manually set this.
+```
 
 ---
 
 # 📌 82. call(), apply(), bind()
 
-Used to control:
+Used to control: this value.
 
-this value.
+```js
+function greet() {
+  console.log(this.name);
+}
 
+const user = { name: "Siri" };
+
+greet.call(user);
 ```
-fn.call(obj)
-fn.apply(obj)
-const newFn = fn.bind(obj)
-```
+this = user
+
+Difference:
+- call(obj, a, b)
+- apply(obj, [a, b])
+- bind(obj) → returns new function
 
 ---
 
 # 📌 83. Prototype Chain Deep Reality
 
-When property not found:
+When property not found, JS checks:
 
+Object → prototype → parent prototype → Object.prototype → null
+```js
+const person = {
+  greet() {
+    console.log("Hello");
+  }
+};
+
+const student = Object.create(person);
+
+student.greet();
+
+```
 JS checks:
-
-Object → prototype → parent prototype → Object.prototype
+- student → not found
+- person → found
 
 ---
 
 # 📌 84. Object.create()
 
 Creates object with custom prototype.
+```js
+const person = {
+  greet() {
+    console.log("Hello");
+  }
+};
+
+const student = Object.create(person);
+
+student.name = "Siri";
+
+student.greet(); // Hello
+```
+student inherits from person.
 
 ---
 
 # 📌 85. Function is an Object
 
-Functions have:
+Functions have: Properties, Methods, Prototype
+```js
+function greet() {}
 
-Properties
-Methods
-Prototype
+greet.language = "English";
+
+console.log(greet.language); // English
+
+```
+Functions also have: greet.prototype, used for inheritance.
 
 ---
 
 # 📌 86. Constructor Functions (Old Style)
-
-```
+Before ES6 classes, objects were created using constructor functions.
+```js
 function Car(name) {
   this.name = name;
 }
+
+const c1 = new Car("BMW");
+console.log(c1.name); // BMW
 ```
+new creates a new object
+
+this refers to that new object
 
 ---
 
 # 📌 87. Class vs Prototype Reality
 
-Class syntax:
+```js
+class Car {
+  constructor(name) {
+    this.name = name;
+  }
+}
+//similar to
+function Car(name) {
+  this.name = name;
+}
+```
+Classes are just: A cleaner syntax over prototypes
 
-Just syntactic sugar over prototypes.
+JavaScript still uses prototype-based inheritance behind the scenes.
 
 ---
 
 # 📌 88. Shallow vs Deep Clone Problems
 
-Shallow clone:
+Shallow clone: Copies only the top layer. Nested objects still share reference.
 
-Copies reference.
+Deep clone: Copies nested objects.
+```js
+const a = { x: 1, y: { z: 2 } };
+const b = { ...a };
 
-Deep clone:
+b.y.z = 99;
 
-Copies nested objects.
+console.log(a.y.z); // 99 (changed!)
+
+const a = { x: 1, y: { z: 2 } };
+const b = JSON.parse(JSON.stringify(a));
+
+b.y.z = 99;
+
+console.log(a.y.z); // 2 (safe)
+
+```
 
 ---
 
 # 📌 89. Object Freezing
 
-```
-Object.freeze(obj)
+```js
+const obj = { name: "Siri" };
+
+Object.freeze(obj);
+
+obj.name = "John"; // ignored
+console.log(obj.name); // Siri
 ```
 
 Makes object immutable.
+Cannot: Change, Add, Delete properties
 
 ---
 
 # 📌 90. Object Sealing
 
-```
-Object.seal(obj)
+```js
+const obj = { name: "Siri" };
+
+Object.seal(obj);
+
+obj.name = "John"; // allowed
+obj.age = 25;      // not allowed
+delete obj.name;   // not allowed
 ```
 
-Cannot add/remove properties.
+Cannot add/remove properties. But can update values.
 
 ---
 
-# 📌 91. Descriptors
+# 📌 91. Property Descriptors
 
-Control property behavior:
+Control property behavior: 
+- writable → can change value?
+- enumerable → appears in loops?
+- configurable → can delete/modify?
+```js
+const obj = {};
 
-Writable
-Enumerable
-Configurable
+Object.defineProperty(obj, "name", {
+  value: "Siri",
+  writable: false
+});
+
+obj.name = "John";
+console.log(obj.name); // Siri
+```
 
 ---
 
 # 📌 92. Strict Mode
 
-```
+```js
 "use strict";
 ```
-
-Prevents:
+Makes JavaScript stricter and safer. Prevents:
 
 * Undeclared variables
-* Silent errors
+* Silent errors (Turns them into real errors.)
+```js
+"use strict";
+x = 10; // Error
+```
 
 ---
 
 # 📌 93. Debouncing vs Throttling (Performance)
 
-Debounce:
-Run after delay.
+Debounce: Run after delay. Run function after user stops triggering.
 
-Throttle:
-Limit execution rate.
+Throttle: Limit execution rate. Run function once every X time.
 
 ---
 
 # 📌 94. Virtual DOM Concept
 
-Used by:
+Used by: React
 
-React.
+Process:
+- Create virtual copy
+- Compare old vs new
+- Update only changed parts
 
-Improves performance by:
-
-Minimizing real DOM updates.
+Result:
+- Faster performance
+- Fewer real DOM updates
 
 ---
 
 # 📌 95. JavaScript Engine Optimization
 
 V8 optimizes:
-
-* Hot functions
-* Inline caching
-* Hidden classes
+* Hot functions (Functions called many times get optimized)
+* Inline caching (Engine remembers: “Last time this object had this property”)
+* Hidden classes (Internal structure used to speed property access)
 
 ---
 
 # 📌 96. Hidden Classes (V8 Internal Concept)
 
-Objects with same shape:
+If objects have same structure:
+```js
+const a = { x: 1, y: 2 };
+const b = { x: 3, y: 4 };
+```
+- V8 creates one hidden class for both. 
+- Fast access.
 
-Optimized by engine.
-
-Changing structure often:
-Slows performance.
+But if structure keeps changing:
+```js
+const obj = {};
+obj.x = 1;
+obj.y = 2;
+obj.z = 3;
+```
+- Engine keeps creating new hidden classes.
+- Result: Slower performance
+- Best practice: Create objects with same structure.
 
 ---
 
-# 📌 97. Inline Caching
+# 📌 97. Inline Caching(V8 Optimization)
 
-Speeds up:
+Speeds up: Repeated property access.
+```js
+const user = { name: "Siri" };
 
-Repeated property access.
+console.log(user.name);
+console.log(user.name);
+console.log(user.name);
+```
+What V8 does internally:
+- First time → finds where name is stored
+- Remembers that location
+- Next times → jumps directly to it
+- This makes repeated property access very fast.
 
 ---
 
 # 📌 98. Tail Call Optimization (Conceptual)
 
-Prevents stack overflow in recursion.
+Prevents stack overflow in deep recursion.
+```js
+function sum(n) {
+  if (n === 0) return 0;
+  return n + sum(n - 1);
+}
+//Each call adds a new stack frame → can overflow
+//Tail
+function sum(n, acc = 0) {
+  if (n === 0) return acc;
+  return sum(n - 1, acc + n);
+}
+```
+The last operation is the recursive call.
 
-Not widely supported yet.
+In theory: Engine can reuse same stack frame. Prevents memory growth
+
+But not widely supported yet.
 
 ---
 
 # 📌 99. Event Delegation
 
-Attach one listener to parent:
+Attach one event listener to parent instead of many children
+```js
+document.querySelectorAll("li").forEach(li => {
+  li.addEventListener("click", () => console.log("clicked"));
+}); //bad
 
-Handle children events.
-
-Improves performance.
+document.getElementById("list").addEventListener("click", (e) => {
+  if (e.target.tagName === "LI") {
+    console.log("Item clicked");
+  }
+}); //better
+```
+Benefits: Better performance, Works for dynamically added elements
 
 ---
 
 # 📌 100. Security Risks in JavaScript
 
-XSS
-CSRF
-Prototype pollution
+- XSS
+- CSRF
+- Prototype pollution (Attacker modifies global object prototype.)
 
 ---
 
 # 📌 101. Module Systems
 
 CommonJS:
-Node.js
+```js
+const fs = require("fs");
+module.exports = myFunction;
+```
+Used in Node.js
 
 ES Modules:
-Modern JS
+```js
+export function test() {}
+import { test } from "./file.js";
+
+```
+used in Browsers, Modern Node
 
 ---
 
@@ -1289,17 +1766,21 @@ Removes unused code during build.
 
 # 📌 103. Transpilers
 
-Babel converts:
-
-Modern JS → Older JS.
+Babel converts: Modern JS → Older JS.
+```js
+const add = (a, b) => a + b;
+//converted to below
+var add = function(a, b) {
+  return a + b;
+};
+```
+So old browsers can run it.
 
 ---
 
 # 📌 104. Polyfills
-
-Add support for:
-
-Old browsers.
+Adds missing features to old browsers.
+Example: Old browser doesn’t support `Array.includes()`, Polyfill adds it manually.
 
 ---
 
@@ -1307,16 +1788,13 @@ Old browsers.
 
 Run JS in background threads.
 
-Used for:
-
-Heavy computation.
+Used for: Heavy computation, Image processing, Data parsing
 
 ---
 
 # 📌 106. Service Worker Deep Use
 
-Enables:
-
+Enables: 
 * Offline apps
 * Push notifications
 * Caching
@@ -1334,32 +1812,49 @@ Enables:
 
 # 📌 108. Node.js Event Loop Differences
 
-Node loop has phases:
+Node has multiple phases:
+- Timers → setTimeout
+- I/O callbacks → file/network
+- Poll → wait for events
+- Check → setImmediate
 
-Timers
-I/O callbacks
-Poll
-Check
+Node handles:
+- Server requests
+- File operations
 
 ---
 
 # 📌 109. Streams in Node.js
 
-Used for:
-
-Large file handling.
+Used for: Large file handling.
 
 ---
 
 # 📌 110. Clustering in Node.js
 
-Use multiple CPU cores.
+Node is single-threaded.
+
+Clustering allows:
+- Using multiple CPU cores
+- Running multiple Node processes
+
+Result:
+- Better performance
+- More requests handled
 
 ---
 
 # 📌 111. Worker Threads (Node)
 
 True multithreading support.
+
+Used for:
+- CPU-heavy tasks
+- Parallel processing
+
+Example:
+- Data analysis
+- Image compression
 
 ---
 

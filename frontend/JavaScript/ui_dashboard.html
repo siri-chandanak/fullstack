@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#f6f7fb; }
+    .layout { display:grid; grid-template-columns:260px 1fr; min-height:100vh; }
+    .sidebar { background:#111827; color:#fff; padding:18px; }
+    .brand { font-weight:800; letter-spacing:0.5px; margin-bottom:18px; }
+    .nav a { display:block; color:#cbd5e1; text-decoration:none; padding:10px 12px; border-radius:10px; margin-bottom:6px; }
+    .nav a.active, .nav a:hover { background:#1f2937; color:#fff; }
+    .main { padding:22px; }
+    .top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+    .search { flex:1; max-width:520px; }
+    .search input { width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; outline:none; }
+    .grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+    .card { background:#fff; border-radius:14px; padding:16px; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+    .kpi { font-size:28px; font-weight:800; margin:6px 0 0; }
+    .muted { color:#666; font-size:13px; }
+    .row { margin-top:14px; display:grid; grid-template-columns:2fr 1fr; gap:14px; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:10px 8px; border-bottom:1px solid #eee; font-size:14px; }
+    .btn { background:#7c5cff; color:#fff; border:0; padding:10px 12px; border-radius:10px; cursor:pointer; }
+    .danger { background:#ef4444; }
+    @media (max-width: 900px) { .layout { grid-template-columns:1fr; } .sidebar { display:none; } .grid { grid-template-columns:1fr; } .row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">MyDashboard</div>
+      <nav class="nav">
+        <a class="active" href="#">Overview</a>
+        <a href="#">Users</a>
+        <a href="#">Reports</a>
+        <a href="#">Settings</a>
+      </nav>
+      <button class="btn danger" style="width:100%; margin-top:14px;" onclick="logout()">Logout</button>
+    </aside>
+
+    <main class="main">
+      <div class="top">
+        <h2 style="margin:0;">Overview</h2>
+        <div class="search"><input id="q" placeholder="Search activity..." oninput="filterRows()" /></div>
+        <button class="btn" onclick="refresh()">Refresh</button>
+      </div>
+
+      <section class="grid">
+        <div class="card">
+          <div class="muted">Active Users</div>
+          <div id="kpiUsers" class="kpi">—</div>
+        </div>
+        <div class="card">
+          <div class="muted">API Requests (Today)</div>
+          <div id="kpiReq" class="kpi">—</div>
+        </div>
+        <div class="card">
+          <div class="muted">Errors (Today)</div>
+          <div id="kpiErr" class="kpi">—</div>
+        </div>
+      </section>
+
+      <section class="row">
+        <div class="card">
+          <h3 style="margin:0 0 10px;">Recent Activity</h3>
+          <table>
+            <thead>
+              <tr><th>Time</th><th>Event</th><th>Status</th></tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3 style="margin:0 0 10px;">Quick Actions</h3>
+          <p class="muted">Simulate real UI actions.</p>
+          <button class="btn" style="width:100%; margin-bottom:10px;" onclick="addActivity()">Add Activity</button>
+          <button class="btn" style="width:100%;" onclick="alert('Open settings (demo)')">Open Settings</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // token check (from login.html demo)
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    //if (!token) window.location.href = "login.html";
+
+    const rowsEl = document.getElementById("rows");
+    let activities = [
+      { time:"09:10", event:"Login", status:"OK" },
+      { time:"10:25", event:"Fetched /api/users", status:"OK" },
+      { time:"11:02", event:"Fetched /api/reports", status:"OK" },
+      { time:"11:19", event:"POST /api/items", status:"OK" },
+      { time:"12:01", event:"GET /api/items", status:"OK" }
+    ];
+
+    function render() {
+      // KPIs (demo numbers)
+      document.getElementById("kpiUsers").innerText = 128;
+      document.getElementById("kpiReq").innerText = 4521;
+      document.getElementById("kpiErr").innerText = 7;
+
+      rowsEl.innerHTML = activities.map(a =>
+        `<tr><td>${a.time}</td><td>${a.event}</td><td>${a.status}</td></tr>`
+      ).join("");
+    }
+
+    function filterRows() {
+      const q = document.getElementById("q").value.toLowerCase();
+      const filtered = activities.filter(a =>
+        a.event.toLowerCase().includes(q) || a.status.toLowerCase().includes(q)
+      );
+      rowsEl.innerHTML = filtered.map(a =>
+        `<tr><td>${a.time}</td><td>${a.event}</td><td>${a.status}</td></tr>`
+      ).join("");
+    }
+
+    function addActivity() {
+      const now = new Date();
+      const time = now.toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" });
+      activities.unshift({ time, event:"Manual action clicked", status:"OK" });
+      render();
+    }
+
+    function refresh() {
+      render();
+      filterRows();
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+
+    render();
+  </script>
+</body>
+</html>
