@@ -250,9 +250,8 @@ function App() {
 ```jsx
 function App() {
   const [email, setEmail] = useState("");
-
   function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault();  //This stops the page from reloading.
     console.log(email);
   }
 
@@ -267,21 +266,264 @@ function App() {
   );
 }
 ```
+- CheckBox 
+```jsx
+function App() {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={() => setChecked(!checked)}
+    />
+  );
+}
+```
+- Controlled (most common): React controls the value using state
+- Uncontrolled: DOM controls it, You read value using useRef
+```jsx
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(email, password);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <input
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <button type="submit">Login</button>
+    </form>
+  );
+}
+```
+
+### Routing
+- Routing = Showing different components based on the URL.
+```jsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+- Navigation: moving between pages
+```jsx
+import { Link } from "react-router-dom";
+
+<Link to="/">Home</Link>
+<Link to="/login">Login</Link>
+```
+Example
+```jsx
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+function Home() {
+  return <h1>Home</h1>;
+}
+
+function Login() {
+  return <h1>Login</h1>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link>
+        <br />
+        <Link to="/login">Login</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+- Route Parameters(Dynamic URLs): Used when URL contains values.
+```jsx
+<Route path="/user/:id" element={<User />} />
 
 
+import { useParams } from "react-router-dom";
 
+function User() {
+  const { id } = useParams();
+  return <h1>User ID: {id}</h1>;
+}
 
+```
+- Protected Routes (for logged in users only type)
+```jsx
+function Protected({ children }) {
+  const isLoggedIn = true;
 
+  return isLoggedIn ? children : <Login />;
+}
 
+<Route
+  path="/dashboard"
+  element={
+    <Protected>
+      <Dashboard />
+    </Protected>
+  }
+/>
 
+```
 
+### APIs using Axios
+- An API is how your frontend talks to backend.
+- fetch: Basic, Smaller projects, simple APIs (built-in)
+- Axios: Comfortable, Large project, many API calls (npm install axios)
+- Axios provides: Cleaner syntax, Auto JSON conversion, Better error handling
+```jsx
+import axios from "axios";
+import { useEffect, useState } from "react";
 
+function Users() {
+  const [users, setUsers] = useState([]);
 
+  useEffect(() => {
+    axios.get("https://jsonplaceholder.typicode.com/users")
+      .then((res) => {
+        setUsers(res.data);
+      });
+  }, []);
 
+  return (
+    <div>
+      <h1>Users</h1>
+      {users.map((u) => (
+        <p key={u.id}>{u.name}</p>
+      ))}
+    </div>
+  );
+}
+```
+- POST method
+```jsx
+axios.post("https://example.com/login", {
+  email: email,
+  password: password
+});
+```
+- Real Login Example
+```jsx
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  function handleLogin() {
+    axios.post("https://example.com/login", {
+      email,
+      password
+    })
+    .then((res) => {
+      console.log(res.data);
+    });
+  }
 
+  return (
+    <div>
+      <input
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
+      <input
+        placeholder="Password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
+      <button onClick={handleLogin}>Login</button>
+    </div>
+  );
+}
+```
+- Error Handling
+```jsx
+useEffect(() => {
+  axios.get("https://jsonplaceholder.typicode.com/users")
+    .then((res) => setUsers(res.data))
+    .catch((err) => console.log(err));
+}, []);
+```
+- async/await
+```jsx
+useEffect(() => {
+  async function fetchUsers() {
+    try {
+      const res = await axios.get("https://jsonplaceholder.typicode.com/users");
+      setUsers(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  fetchUsers();
+}, []);
+```
+
+### useContext (Global State)
+- Prop Drilling = Passing props through many layers just to reach one component.
+- So, instead use Context, lets you share data globally. So ANY component can access it directly. No prop passing needed.
+- Context is commonly used for: Logged-in user info, Theme (dark/light), Language, Auth token
+```jsx
+//Create Context
+import { createContext } from "react";
+
+export const UserContext = createContext();
+
+//Provide Data
+import { useState } from "react";
+import { UserContext } from "./UserContext";
+
+function App() {
+  const [user, setUser] = useState("Siri");
+
+  return (
+    <UserContext.Provider value={user}>
+      <Dashboard />
+    </UserContext.Provider>
+  );
+}
+
+//Use Data anywhere
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
+
+function UserInfo() {
+  const user = useContext(UserContext);
+
+  return <h1>Hello {user}</h1>;
+}
+
+```
 
 ## What is React?
 
