@@ -1057,6 +1057,7 @@ This keeps data in one place.
 ### Controlled vs Uncontrolled
 
 Controlled: React controls input via state (most common)
+
 Uncontrolled: DOM keeps value, read using ref
 
 ### Composition
@@ -1204,64 +1205,15 @@ What this does:
 * If you must use `dangerouslySetInnerHTML`, sanitize content.
 * Use HTTPS, secure cookies, CSRF protections (backend).
 
-# Prop Drilling Problem
-
-Passing props through many layers.
-
-Solved using:
-
-* Context
-* Redux
-
-# Routing
-
-Navigate between pages.
-
-Library:
-
-react-router-dom
-
-# Nested Routes
-
-Route inside route.
-
-# Axios
-
-Better alternative to fetch.
-
-# React.memo
-
-Prevents unnecessary re-renders.
-
-# Code Splitting
-
-Split bundles into smaller chunks.
-
 # Higher Order Components (HOC)
 
 Component that wraps another component.
 
-# Redux Core Concepts
-- Store
-- Actions
-- Reducers
 
 # Forms Libraries
 
 - Formik
 - React Hook Form
-
-# Authentication Flow
-
-Login → Store token → Protect routes
-
-# 45. Protected Routes
-
-Restrict access if not logged in.
-
-# LocalStorage in React
-
-Store tokens/settings.
 
 # SSR vs CSR
 
@@ -1282,14 +1234,6 @@ Features:
 * Routing
 * Performance
 
-# Static Site Generation
-
-Pre-build pages.
-
-# Hydration
-
-Attach JS to server-rendered HTML.
-
 # Micro-Frontend Architecture
 
 Split frontend into multiple apps.
@@ -1308,10 +1252,6 @@ Split frontend into multiple apps.
 
 - ARIA labels
 - Keyboard navigation
-
-# Internationalization
-
-Multi-language support.
 
 # Deployment
 
@@ -1349,18 +1289,8 @@ Think in:
 * State flow
 * Data flow
 
-# React Mastery Definition
 
-You master React when you understand:
-
-* Component design
-* State architecture
-* Performance optimization
-* Hooks deeply
-* Routing
-* Data fetching
-
-## ommon  Q&A (Quick)
+## Common  Q&A (Quick)
 
 **Q: Props vs State?**
 Props = inputs from parent. State = internal data that changes UI.
@@ -1379,16 +1309,3 @@ State change, props change, context change, parent rerender.
 
 **Q: How to optimize rerenders?**
 Memoize heavy components (memo), memoize expensive computations (useMemo), stable callbacks (useCallback), split components, avoid unnecessary state.
-
-## Mini Cheat Sheet
-
-* useState: local state
-* useEffect(fn, []): run once + cleanup
-* useEffect(fn, [x]): when x changes
-* useRef: DOM / mutable value w/o rerender
-* useMemo: memoize value
-* useCallback: memoize function
-* memo: memoize component render
-* Context: global-ish state
-* Immutable updates: `{...obj}`, `[...arr]`
-* List key: stable unique id

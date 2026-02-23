@@ -1,8 +1,7 @@
 # 🌐 JavaScript Master Notes
 
-## (Basic → Intermediate → Advanced → Expert → Browser → Node → Performance → Architect Level)
+JavaScript is a high-level, dynamic, prototype-based, event-driven language used across browsers, servers, and modern applications.
 
-JavaScript is one of the MOST important programming languages in the world.
 
 Used in:
 
@@ -13,12 +12,9 @@ Used in:
 * Game development
 * Full-stack systems
 
-This guide covers everything from:
-**Absolute Beginner → Deep Internals → Production → Architect-Level**
-
 ---
 
-# 📌 1. What is JavaScript?
+# 📌 What is JavaScript?
 
 JavaScript is a:
 
@@ -32,10 +28,12 @@ Runs in:
 
 * Browsers
 * Servers (Node.js): Runs on the server using Node.js to build backend services and APIs.
+* Deno: JavaScript & TypeScript runtime created by Ryan Dahl (the same person who created Node.js), Modern, improved version of Node.js
+* Edge runtimes: Modern, improved version of Node.js, 'User → Nearby Edge Location → Response'
 
 ---
 
-# 📌 2. JavaScript vs ECMAScript
+# 📌 JavaScript vs ECMAScript
 
 ECMAScript: A standardized specification that defines the rules, syntax, and features a scripting language should follow. (European Computer Manufacturers Association; now called Ecma International)
 
@@ -44,7 +42,7 @@ Implementation of ECMAScript.
 
 ---
 
-# 📌 3. Where JavaScript Runs
+# 📌 Where JavaScript Runs
 
 Browser:
 
@@ -58,7 +56,26 @@ Server:
 
 ---
 
-# 📌 4. JavaScript Execution Engine
+# 📌 JavaScript Execution Engine
+
+Every JS code runs inside an **Execution Context**.
+
+Types:
+- Global Execution Context
+- Function Execution Context
+- Eval Execution Context
+
+Each context contains:
+- Variable Environment
+- Scope Chain
+- `this` binding
+
+JS runs in two phases:
+
+1. Memory Allocation Phase
+2. Execution Phase
+
+This explains hoisting (JavaScript moves declarations to the top of their scope before execution) behavior.
 
 Examples:
 
@@ -71,9 +88,63 @@ Engine responsibilities:
 * Compile: Converts the parsed code into optimized machine-level instructions.
 * Execute: Runs the compiled code to perform the actual tasks.
 
+JavaScript uses a **LIFO call stack** to manage execution.
+
+Single-threaded = One stack.
+
+## JavaScript Hoisting Summary
+
+| Type | Hoisted? | Can Use Before Declaration? |
+|------|----------|----------------------------|
+| `var` | Yes | Yes (`undefined`) |
+| `let` | Yes | ❌ No (Temporal Dead Zone error) |
+| `const` | Yes | ❌ No (Temporal Dead Zone error) |
+| Function Declaration | Yes | ✅ Yes |
+| Function Expression | No (only `var` part is hoisted) | ❌ No |
+
 ---
 
-# 📌 5. Basic Syntax
+### Notes
+
+- `var` is hoisted and initialized with `undefined`.
+- `let` and `const` are hoisted but remain in the **Temporal Dead Zone (TDZ)** until initialized.
+- Function declarations are fully hoisted (name + body).
+- Function expressions behave like variables; only the variable declaration is hoisted, not the function assignment.
+
+## Closures (Core Concept)
+
+A closure is:
+
+> A function that remembers variables from its lexical parent scope even after parent finishes execution.
+
+Closures store references, not values.
+
+Used in:
+- Data privacy
+- State management
+- Memoization
+- Event handlers
+```js
+function createUser() {
+  let password = "secret123";
+
+  return {
+    checkPassword(input) {
+      return input === password;
+    }
+  };
+}
+
+const user = createUser();
+
+console.log(user.checkPassword("secret123")); // true
+console.log(user.password); // undefined
+```
+
+
+---
+
+# Basic Syntax
 
 ```
 console.log("Hello World");
@@ -81,7 +152,7 @@ console.log("Hello World");
 
 ---
 
-# 📌 6. Variables
+# Variables
 
 ```
 var a = 10;
@@ -112,7 +183,7 @@ Function scope: A variable exists anywhere inside the entire function where it i
 
 ---
 
-# 📌 7. Data Types
+# Data Types
 
 ### Primitive Types
 
@@ -129,10 +200,18 @@ Function scope: A variable exists anywhere inside the entire function where it i
 * object
 * array
 * function
+- Map / Set
+- WeakMap / WeakSet
+
+## Stack vs Heap
+
+- Stack → primitives, function calls
+- Heap → objects, arrays, functions
+
 
 ---
 
-# 📌 8. Dynamic Typing
+# 📌 Dynamic Typing
 
 ```
 let x = 10;
@@ -143,7 +222,7 @@ Type can change anytime.
 
 ---
 
-# 📌 9. Type Conversion
+# 📌 Type Conversion
 
 ```
 Number("10")
@@ -153,7 +232,7 @@ Boolean(1)
 
 ---
 
-# 📌 10. Operators
+# 📌 Operators
 
 Arithmetic: +, *, /, %
 
@@ -163,7 +242,7 @@ Logical: &&, ||, !
 
 ---
 
-# 📌 11. == vs ===
+# 📌 == vs ===
 
 == → loose comparison (Compares values after automatically converting their types if needed.)
 
@@ -171,13 +250,13 @@ Logical: &&, ||, !
 
 ---
 
-# 📌 12. Control Statements
+# 📌 Control Statements
 
 if / else, switch, for, while, do-while
 
 ---
 
-# 📌 13. Functions
+# 📌Functions
 
 ```
 function add(a, b) {
@@ -187,7 +266,7 @@ function add(a, b) {
 
 ---
 
-# 📌 14. Function Types
+# 📌 Function Types
 
 - Function declaration
 - Function expression
@@ -250,14 +329,14 @@ console.log(p1.name);
 ```
 ---
 
-# 📌 15. Arrow Function Features
+# 📌 Arrow Function Features
 
 * Short syntax
 * No own "this"
 
 ---
 
-# 📌 16. Objects
+# 📌 Objects
 
 ```js
 const user = {
@@ -275,7 +354,7 @@ user["name"]
 
 ---
 
-# 📌 17. Arrays
+# 📌 Arrays
 
 ```js
 const arr = [1, 2, 3];
@@ -285,7 +364,7 @@ Methods: push(), pop(), map(), filter(), reduce()
 
 ---
 
-# 📌 18. Loops
+# 📌 Loops
 
 ```js
 for (let i = 0; i < 5; i++) {}
@@ -297,7 +376,7 @@ for (let item of arr) {}
 
 ---
 
-# 📌 19. DOM (Browser Concept)
+# 📌 DOM (Browser Concept)
 
 DOM = Document Object Model(A tree-like representation of a web page that JavaScript can access and modify.)
 
@@ -326,7 +405,7 @@ Allows JS to:
 
 ---
 
-# 📌 20. Event Handling
+# 📌 Event Handling
 
 ```
 button.addEventListener("click", () => {});
@@ -334,7 +413,7 @@ button.addEventListener("click", () => {});
 
 ---
 
-# 📌 21. Scope
+# 📌 Scope
 
 - Global scope
 - Function scope
@@ -342,7 +421,7 @@ button.addEventListener("click", () => {});
 
 ---
 
-# 📌 22. Hoisting
+# 📌 Hoisting
 
 Variables & functions moved to top. JavaScript moves variable and function declarations to the top of their scope before execution.
 
@@ -353,7 +432,7 @@ var x = 5;
 
 ---
 
-# 📌 23. Closures (VERY IMPORTANT)
+# 📌 Closures (VERY IMPORTANT)
 
 Function remembers parent scope.
 
@@ -368,7 +447,7 @@ function outer() {
 
 ---
 
-# 📌 24. this Keyword
+# 📌 this Keyword
 
 Refers to:
 
@@ -378,7 +457,7 @@ Changes based on call type.
 
 ---
 
-# 📌 25. Prototypes
+# 📌 Prototypes
 
 JavaScript uses: Prototype-based inheritance.
 
@@ -403,7 +482,7 @@ student.greet();  // Hello!
 
 ---
 
-# 📌 26. Classes (ES6)
+# 📌 Classes (ES6)
 
 ```
 class Car {
@@ -415,7 +494,7 @@ class Car {
 
 ---
 
-# 📌 27. Inheritance
+# 📌 Inheritance
 
 ```
 class A {}
@@ -424,12 +503,12 @@ class B extends A {}
 
 ---
 
-# 📌 28. Modules
+# 📌 Modules
 
 Export:
 
 ```
-export default function() {}
+export default function fn() {}
 ```
 
 Import:
@@ -440,7 +519,7 @@ import fn from "./file.js";
 
 ---
 
-# 📌 29. Asynchronous JavaScript (CRITICAL)
+# 📌 Asynchronous JavaScript (CRITICAL)
 
 Asynchronous JavaScript: Lets JavaScript handle time-taking tasks (API calls, timers, file reads) without stopping the main thread.
 
@@ -449,7 +528,7 @@ Single-threaded: JavaScript runs one task at a time on a single call stack.
 Uses: Event loop, , Callbacks, Promises, Async/await
 ---
 
-# 📌 30. Callback
+# 📌 Callback
 
 Function passed as argument. Functions passed into other functions to run later when a task finishes.
 
@@ -459,7 +538,7 @@ setTimeout(() => console.log("Done"), 1000);
 
 ---
 
-# 📌 31. Promise
+# 📌 Promise
 
 Represents future result.
 
@@ -475,7 +554,7 @@ fetch(url).then(res => console.log(res));
 
 ---
 
-# 📌 32. Async/Await
+# 📌 Async/Await
 
 Cleaner async code.Cleaner way to write promise-based code that looks synchronous.
 
@@ -486,9 +565,37 @@ async function load() {
 }
 ```
 
+## 🌟 Promise vs Async/Await — Difference Table
+
+| Feature | Promise (.then / .catch) | async / await |
+|----------|---------------------------|----------------|
+| Type | Core JavaScript feature | Built on top of Promises (syntactic sugar) |
+| Syntax Style | Chain-based | Looks synchronous |
+| Readability | Can become hard to read with chaining | Cleaner and easier to understand |
+| Error Handling | `.catch()` method | `try / catch` block |
+| Return Value | Returns a Promise | Always returns a Promise |
+| Internal Mechanism | Uses Microtask Queue | Uses Promises + Microtask Queue |
+| Flow Control | Uses chaining | Straight-line, step-by-step flow |
+| Sequential Execution | Requires chaining | Simple with `await` |
+| Parallel Execution | `Promise.all()` | `Promise.all()` still required |
+| Debugging | Slightly harder | Easier to debug |
+| Nesting Risk | Can lead to "Promise chaining complexity" | Avoids nesting, cleaner structure |
+| Performance | Same performance as async/await | Same performance as Promise |
+| Best Use Case | Complex chaining & functional patterns | Sequential async logic & readable code |
+| Learning Curve | Slightly lower-level understanding needed | Easier for beginners to read |
+
 ---
 
-# 📌 33. Event Loop (VERY IMPORTANT)
+## 📌 Key Takeaway
+
+- `async/await` does NOT replace Promises.
+- It is just cleaner syntax over Promises.
+- Both rely on the same event loop and microtask queue.
+- Performance difference = none.
+
+---
+
+# 📌 Event Loop (VERY IMPORTANT)
 
  Manages execution by moving completed async tasks from the queue to the call stack when it’s free.
 
@@ -502,7 +609,7 @@ Queues:
 * Task queue
 ---
 
-# 📌 34. Microtask vs Task Queue
+# 📌  Microtask vs Task Queue
 
 Microtask Queue (higher priority): Used for Promise callbacks (.then, catch, finally) and runs immediately after the current code finishes, before moving to the task queue.
 
@@ -527,7 +634,7 @@ Timeout   // Task runs after
 
 ---
 
-# 📌 35. Error Handling
+# 📌 Error Handling
 
 ```js
 try {
@@ -543,13 +650,13 @@ try {
 
 ---
 
-# 📌 36. JSON Handling
+# 📌 JSON Handling
 
 Used to convert between JSON strings and JavaScript objects.
 - JSON.parse() – Converts a JSON string into a JavaScript object.
 - JSON.stringify() – Converts a JavaScript object into a JSON string.
 ```js
-const str = '{"name":"Siri","age":24}';
+const str = `{"name":"Siri","age":24}`;
 const obj = JSON.parse(str);
 console.log(obj.name); // Siri
 
@@ -561,7 +668,7 @@ console.log(str); // {"name":"Siri","age":24}
 
 ---
 
-# 📌 37. Browser APIs
+# 📌 Browser APIs
 
 Browser APIs: Built-in features provided by the browser that JavaScript can use to interact with web data and storage.
 - Fetch API: Used to send HTTP requests and get data from servers (like calling an API).
@@ -582,7 +689,7 @@ console.log(sessionStorage.getItem("user"));
 
 ---
 
-# 📌 38. Fetch API
+# 📌 Fetch API
 
 ```js
 fetch(url)
@@ -672,7 +779,7 @@ app.listen(3000, () => {
 
 ---
 
-# 📌 43. REST API in JS
+# 📌 REST API in JS
 
 REST API in JS: A way to send and receive data between frontend and backend using HTTP methods (GET, POST, PUT, DELETE).
 
@@ -696,20 +803,20 @@ fetch("http://localhost:3000/api/users")
 ```
 ---
 
-# 📌 44. JavaScript Memory Model
+# 📌 JavaScript Memory Model
 
 - Stack: Stores primitive values (number, string, boolean, null, undefined) and function call data; it is fast and fixed in size.
 - Heap: Stores objects, arrays, and functions; it is larger and used for dynamic memory allocation.
 
 ---
 
-# 📌 45. Garbage Collection
+# 📌 Garbage Collection
 
 JavaScript automatically frees memory by removing objects and variables that are no longer being used or referenced.
 
 ---
 
-# 📌 46. Shallow vs Deep Copy
+# 📌 Shallow vs Deep Copy
 
 Shallow Copy: Creates a new object but copies references of nested objects, so changes in nested data affect both copies.
 
@@ -717,7 +824,7 @@ Deep Copy: Creates a completely independent copy, duplicating all values (includ
 
 ---
 
-# 📌 47. Destructuring
+# 📌 Destructuring
 Destructuring: A shortcut to extract values from objects or arrays into variables.
 ```js
 const user = { name: "Siri", age: 24 };
@@ -730,7 +837,7 @@ console.log(name); // Siri
 
 ---
 
-# 📌 48. Spread Operator
+# 📌 Spread Operator
 Expands elements of an array or object to copy or merge them.
 ```js
 const arr = [1, 2, 3];
@@ -750,7 +857,7 @@ console.log(updatedUser);
 
 ---
 
-# 📌 49. Rest Operator
+# 📌 Rest Operator
 Collects multiple arguments into a single array.
 ```js
 function sum(...nums) {
@@ -772,7 +879,7 @@ reduce() is an array method used to combine all values into a single result.
 
 ---
 
-# 📌 50. Template Literals
+# 📌 Template Literals
 Use backticks to insert variables into strings.
 ```js
 const name = "Siri";
@@ -784,7 +891,7 @@ console.log(msg); // Hello Siri
 
 ---
 
-# 📌 51. Map & Set
+# 📌 Map & Set
 
 Map: Key-value store, Stores data as key–value pairs; keys can be any type.
 
@@ -804,7 +911,7 @@ console.log(set); // Set {1, 2, 3}
 
 ---
 
-# 📌 52. WeakMap / WeakSet
+# 📌 WeakMap / WeakSet
 
 WeakMap (Memory-efficient key–value): Keys must be objects; removed automatically if the object is no longer used.
 
@@ -829,7 +936,7 @@ obj = null; // eligible for garbage collection
 ```
 ---
 
-# 📌 53. Functional Programming
+# 📌 Functional Programming
 
 map(), filter(), reduce() - These are array methods used to process data in a clean, reusable way.
 - map() → transform each item
@@ -860,7 +967,7 @@ console.log(sum); // 10
 
 ---
 
-# 📌 54. Debouncing & Throttling
+# 📌 Debouncing & Throttling
 
 Used to control how often a function runs when events fire too many times (scroll, typing, resize).
 
@@ -893,7 +1000,7 @@ Runs at most once per second.
 
 ---
 
-# 📌 55. Security Topics
+# 📌 Security Topics
 - XSS (Cross-Site Scripting):
 Attacker injects malicious script into your website.
 Example:
@@ -921,7 +1028,7 @@ Fix: Use parameterized queries, Validate input
 
 ---
 
-# 📌 56. Performance Optimization
+# 📌 Performance Optimization
 
 * Avoid memory leaks: Don’t keep unused objects, timers, or event listeners.
 
@@ -931,7 +1038,7 @@ Fix: Use parameterized queries, Validate input
 
 ---
 
-# 📌 57. JavaScript Frameworks
+# 📌 JavaScript Frameworks
 These help build large frontend apps faster.
 
 ## React
@@ -955,7 +1062,7 @@ Frameworks → organized way to build big apps
 
 ---
 
-# 📌 58. TypeScript (Important Modern JS)
+# 📌 TypeScript (Important Modern JS)
 
 TypeScript is JavaScript with added types and safety checks before running.
 
@@ -969,7 +1076,7 @@ Compile-time safety: Errors are caught before running the code.
 
 ---
 
-# 📌 59. Browser Storage
+# 📌 Browser Storage
 
 Used to store data in the user's browser.
 
@@ -988,7 +1095,7 @@ document.cookie = "theme=dark";
 
 ---
 
-# 📌 60. WebSockets
+# 📌 WebSockets
 
 Used for real-time communication between client and server.
 Examples: Chat apps, Live notifications, Stock price updates
@@ -1003,7 +1110,7 @@ Connection stays open and data flows continuously.
 
 ---
 
-# 📌 61. Service Workers
+# 📌 Service Workers
 
 Background scripts that run in the browser to enable advanced features.
 
@@ -1019,7 +1126,7 @@ Example idea:
 
 ---
 
-# 📌 62. Testing Tools
+# 📌 Testing Tools
 
 Used to test code automatically.
 - Jest: Popular for React and JS apps, Used for unit testing
@@ -1032,7 +1139,7 @@ test("adds numbers", () => {
 
 ---
 
-# 📌 63. Build Tools
+# 📌 Build Tools
 Used to prepare JS apps for production.
 - Webpack: Bundles many files into one
 - Vite: Fast development server and bundler
@@ -1042,43 +1149,8 @@ Example: ES6 code → Babel → compatible ES5 code
 
 ---
 
-# 📌 64. JavaScript Mastery Definition
 
-You master JavaScript when you understand:
-
-* Closures: Functions remembering parent variables.
-* Event loop: How JS handles async tasks and queues.
-* Async programming: Promises, async/await, callbacks.
-* Prototypes: How objects inherit from other objects.
-* Memory model: Stack vs Heap, garbage collection, references.
-
----
-
-# 📌 65. Final Truth
-
-JavaScript is:
-
-* The language of the web
-* Full-stack capable
-* Extremely powerful
-* Deeply asynchronous
-
-It powers most modern applications on the internet.
-
-# 🌐 JavaScript — Final Deep Layer
-
-## (Hidden Internals, Engine Behavior, Edge Cases, Performance, Production, Architect-Level)
-
-Now this section contains the **remaining deep + expert-level JavaScript knowledge** — the things that:
-
-* Senior frontend/backend JS engineers know
-* V8 engine behavior depends on
-* Performance teams optimize
-* Interviewers test for deep understanding
-
----
-
-# 📌 66. Execution Context (VERY IMPORTANT CORE CONCEPT)
+# 📌 Execution Context 
 
 Every JS code runs inside an `Execution Context`.
 
@@ -1095,7 +1167,7 @@ Each context has:
 
 ---
 
-# 📌 67. Call Stack (Engine Behavior)
+# 📌 Call Stack (Engine Behavior)
 
 JavaScript is `Single-threaded`.
 
@@ -1129,7 +1201,7 @@ Global finishes
 
 ---
 
-# 📌 68. Memory Creation Phase vs Execution Phase
+# 📌 Memory Creation Phase vs Execution Phase
 
 When JS runs:
 
@@ -1148,7 +1220,7 @@ Due to hoisting: a exists but is undefined.
 
 ---
 
-# 📌 69. Temporal Dead Zone (TDZ)
+# 📌 Temporal Dead Zone (TDZ)
 
 Only For let & const. 
 
@@ -1164,7 +1236,7 @@ This period is called: Temporal Dead Zone (From start of scope → until declara
 
 ---
 
-# 📌 70. Hoisting Deep Reality
+# 📌 Hoisting Deep Reality
 
 var: Hoisted, Initialized as undefined.
 
@@ -1188,7 +1260,7 @@ function sayHi() {
 
 ---
 
-# 📌 71. Scope Chain (VERY IMPORTANT)
+# 📌 Scope Chain (VERY IMPORTANT)
 
 If variable not found:
 
@@ -1211,7 +1283,7 @@ outer();
 
 ---
 
-# 📌 72. Lexical Scope
+# 📌 Lexical Scope
 
 Scope defined by: Where function is written, Not where it is called.
 ```js
@@ -1233,7 +1305,7 @@ fn(); //20
 
 ---
 
-# 📌 73. Closures Deep Internals
+# 📌 Closures Deep Internals
 
 Closure stores: Reference to outer variables, Not value.
 ```js
@@ -1283,7 +1355,7 @@ What V8 does (simple):
 
 ---
 
-# 📌 74. Garbage Collection Internals
+# 📌 Garbage Collection Internals
 
 V8 uses: Mark-and-sweep algorithm, Removes Unreachable objects.
 
@@ -1295,7 +1367,7 @@ Sweep: Removes objects that are NOT reachable.
 
 ---
 
-# 📌 75. Memory Leaks in JavaScript
+# 📌 Memory Leaks in JavaScript
 
 Memory that should be freed but isn’t. 
 
@@ -1307,7 +1379,7 @@ Common causes:
 
 ---
 
-# 📌 76. Event Loop Deep Internals
+# 📌  Event Loop Deep Internals
 
 JS runtime has: Call Stack, Web APIs, Callback Queue(Task queue), Microtask Queue
 
@@ -1319,58 +1391,8 @@ Flow:
 
 ---
 
-# 📌 77. Microtask Priority Rule
 
-Execution order:
-
-1. Current stack
-2. Promises (microtasks)
-3. setTimeout (tasks)
-
----
-
-# 📌 78. setTimeout Reality
-
-```js
-setTimeout(fn, 0)
-```
-Does NOT mean immediate. It means `Run when call stack becomes empty`.
-
----
-
-# 📌 79. Promise Internals
-
-Promise callbacks go to: Microtask queue.
-
-That’s why they run before setTimeout.
-
----
-
-# 📌 80. Async/Await Internals
-
-```js
-async function test() {
-  return 5;
-}
-```
-This actually returns:
-```js
-Promise {5}
-```
-await behavior
-```js
-async function test() {
-  await Promise.resolve();
-  console.log("Hello");
-}
-```
-await:
-- Pauses ONLY inside the async function
-- Does NOT block whole program
-
----
-
-# 📌 81. this Binding Rules (CRITICAL)
+# 📌  this Binding Rules (CRITICAL)
 
 Depends on call site.
 
@@ -1410,7 +1432,7 @@ const obj = {
 
 ---
 
-# 📌 82. call(), apply(), bind()
+# 📌 call(), apply(), bind()
 
 Used to control: this value.
 
@@ -1432,7 +1454,7 @@ Difference:
 
 ---
 
-# 📌 83. Prototype Chain Deep Reality
+# 📌 Prototype Chain Deep Reality
 
 When property not found, JS checks:
 
@@ -1455,7 +1477,7 @@ JS checks:
 
 ---
 
-# 📌 84. Object.create()
+# 📌 Object.create()
 
 Creates object with custom prototype.
 ```js
@@ -1475,7 +1497,7 @@ student inherits from person.
 
 ---
 
-# 📌 85. Function is an Object
+# 📌 Function is an Object
 
 Functions have: Properties, Methods, Prototype
 ```js
@@ -1490,7 +1512,7 @@ Functions also have: greet.prototype, used for inheritance.
 
 ---
 
-# 📌 86. Constructor Functions (Old Style)
+# 📌 Constructor Functions (Old Style)
 Before ES6 classes, objects were created using constructor functions.
 ```js
 function Car(name) {
@@ -1506,7 +1528,7 @@ this refers to that new object
 
 ---
 
-# 📌 87. Class vs Prototype Reality
+# 📌 Class vs Prototype Reality
 
 ```js
 class Car {
@@ -1525,7 +1547,7 @@ JavaScript still uses prototype-based inheritance behind the scenes.
 
 ---
 
-# 📌 88. Shallow vs Deep Clone Problems
+# 📌 Shallow vs Deep Clone Problems
 
 Shallow clone: Copies only the top layer. Nested objects still share reference.
 
@@ -1549,7 +1571,7 @@ console.log(a.y.z); // 2 (safe)
 
 ---
 
-# 📌 89. Object Freezing
+# 📌 Object Freezing
 
 ```js
 const obj = { name: "Siri" };
@@ -1565,7 +1587,7 @@ Cannot: Change, Add, Delete properties
 
 ---
 
-# 📌 90. Object Sealing
+# 📌 Object Sealing
 
 ```js
 const obj = { name: "Siri" };
@@ -1581,7 +1603,7 @@ Cannot add/remove properties. But can update values.
 
 ---
 
-# 📌 91. Property Descriptors
+# 📌 Property Descriptors
 
 Control property behavior: 
 - writable → can change value?
@@ -1601,7 +1623,7 @@ console.log(obj.name); // Siri
 
 ---
 
-# 📌 92. Strict Mode
+# 📌 Strict Mode
 
 ```js
 "use strict";
@@ -1617,15 +1639,8 @@ x = 10; // Error
 
 ---
 
-# 📌 93. Debouncing vs Throttling (Performance)
 
-Debounce: Run after delay. Run function after user stops triggering.
-
-Throttle: Limit execution rate. Run function once every X time.
-
----
-
-# 📌 94. Virtual DOM Concept
+# 📌 Virtual DOM Concept
 
 Used by: React
 
@@ -1640,7 +1655,7 @@ Result:
 
 ---
 
-# 📌 95. JavaScript Engine Optimization
+# 📌 JavaScript Engine Optimization
 
 V8 optimizes:
 * Hot functions (Functions called many times get optimized)
@@ -1649,7 +1664,7 @@ V8 optimizes:
 
 ---
 
-# 📌 96. Hidden Classes (V8 Internal Concept)
+# 📌 Hidden Classes (V8 Internal Concept)
 
 If objects have same structure:
 ```js
@@ -1672,7 +1687,7 @@ obj.z = 3;
 
 ---
 
-# 📌 97. Inline Caching(V8 Optimization)
+# 📌 Inline Caching(V8 Optimization)
 
 Speeds up: Repeated property access.
 ```js
@@ -1690,7 +1705,7 @@ What V8 does internally:
 
 ---
 
-# 📌 98. Tail Call Optimization (Conceptual)
+# 📌 Tail Call Optimization (Conceptual)
 
 Prevents stack overflow in deep recursion.
 ```js
@@ -1713,7 +1728,7 @@ But not widely supported yet.
 
 ---
 
-# 📌 99. Event Delegation
+# 📌 Event Delegation
 
 Attach one event listener to parent instead of many children
 ```js
@@ -1731,60 +1746,13 @@ Benefits: Better performance, Works for dynamically added elements
 
 ---
 
-# 📌 100. Security Risks in JavaScript
-
-- XSS
-- CSRF
-- Prototype pollution (Attacker modifies global object prototype.)
-
----
-
-# 📌 101. Module Systems
-
-CommonJS:
-```js
-const fs = require("fs");
-module.exports = myFunction;
-```
-Used in Node.js
-
-ES Modules:
-```js
-export function test() {}
-import { test } from "./file.js";
-
-```
-used in Browsers, Modern Node
-
----
-
-# 📌 102. Tree Shaking
-
-Removes unused code during build.
-
----
-
-# 📌 103. Transpilers
-
-Babel converts: Modern JS → Older JS.
-```js
-const add = (a, b) => a + b;
-//converted to below
-var add = function(a, b) {
-  return a + b;
-};
-```
-So old browsers can run it.
-
----
-
-# 📌 104. Polyfills
+# 📌Polyfills
 Adds missing features to old browsers.
 Example: Old browser doesn’t support `Array.includes()`, Polyfill adds it manually.
 
 ---
 
-# 📌 105. Web Workers
+# 📌 Web Workers
 
 Run JS in background threads.
 
@@ -1792,16 +1760,7 @@ Used for: Heavy computation, Image processing, Data parsing
 
 ---
 
-# 📌 106. Service Worker Deep Use
-
-Enables: 
-* Offline apps
-* Push notifications
-* Caching
-
----
-
-# 📌 107. JavaScript Performance Killers
+# 📌 JavaScript Performance Killers
 
 * Memory leaks
 * Too many DOM updates
@@ -1810,7 +1769,7 @@ Enables:
 
 ---
 
-# 📌 108. Node.js Event Loop Differences
+# 📌 Node.js Event Loop Differences
 
 Node has multiple phases:
 - Timers → setTimeout
@@ -1824,13 +1783,7 @@ Node handles:
 
 ---
 
-# 📌 109. Streams in Node.js
-
-Used for: Large file handling.
-
----
-
-# 📌 110. Clustering in Node.js
+# 📌 Clustering in Node.js
 
 Node is single-threaded.
 
@@ -1844,7 +1797,7 @@ Result:
 
 ---
 
-# 📌 111. Worker Threads (Node)
+# 📌 Worker Threads (Node)
 
 True multithreading support.
 
@@ -1855,29 +1808,3 @@ Used for:
 Example:
 - Data analysis
 - Image compression
-
----
-
-# 📌 112. JavaScript Mastery Definition
-
-You master JavaScript when you deeply understand:
-
-* Closures
-* Event loop
-* Prototype chain
-* Async execution
-* Memory model
-* Engine optimizations
-
----
-
-# 📌 113. Final Final Truth
-
-JavaScript is not just a scripting language.
-
-It is:
-
-* An event-driven runtime
-* A concurrent execution model
-* A full-stack ecosystem
-* A language with deep engine-level behavior
