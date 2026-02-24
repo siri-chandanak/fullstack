@@ -137,7 +137,7 @@ Types:
 * Core Module
 
 
-# 8️⃣ Data Binding
+# Data Binding
 
 ## Interpolation
 
@@ -165,7 +165,7 @@ Types:
 
  
 
-# 9️⃣ Directives
+# Directives
 
 ## Structural Directives
 
